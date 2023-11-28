@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage(View v) {
         EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
         String phoneNumber = editTextPhoneNumber.getText().toString();
-        String message = "Your loved one needs help!";
+        String message = getResources().getString(R.string.fall_message);
 
         try {
             SmsManager smsManager = SmsManager.getDefault();
