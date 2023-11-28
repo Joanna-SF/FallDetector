@@ -11,7 +11,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Emergency contact"
+        android:text="@string/emergency_contact"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"/>
 
@@ -24,14 +24,15 @@
         android:layout_marginTop="10dp"
         android:ems="10"
         android:minHeight="48dp"
-        android:hint="+351 111111111"
-        android:inputType="phone" />
+        android:hint="@string/phone_hint"
+        android:inputType="phone"
+        android:autofillHints="phoneNumber"/>
 
     <Button
         android:id="@+id/buttonSendMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Simulate fall"
+        android:text="@string/button_text"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/editTextPhone"
         android:layout_marginTop="25dp"/>
