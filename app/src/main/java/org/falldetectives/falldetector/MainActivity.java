@@ -27,8 +27,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button buttonACCData = findViewById(R.id.ACCdata);
+        Button buttonBioLib = findViewById(R.id.biolib);
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
+
+        buttonACCData.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, DetectFallActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonBioLib.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
 
         // Check for SMS permission
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
@@ -74,21 +94,4 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
-    public AdapterView.OnItemClickListener deviceToConnectListener = new AdapterView.OnItemClickListener() {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-            // Get the device MAC address, which is the last 17 chars in the View
-            String info = ((TextView) view).getText().toString();
-            String address = info.substring(info.length() - 17);
-
-            // Create the result Intent and include the MAC address
-            Intent intent = new Intent(getApplicationContext(), BluetoothConnect.class);
-            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
-
-            // Set result and finish this Activity
-            startActivity(intent);
-            finish();
-        }
-    };
-}
+};
