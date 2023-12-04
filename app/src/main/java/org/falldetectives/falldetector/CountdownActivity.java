@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class CountdownActivity extends AppCompatActivity {
 
-    static final int RESULT_SEND_FALL_ALERT = 2; // Change private to package-private or public
+    static final int RESULT_SEND_FALL_ALERT = 2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -37,7 +37,6 @@ public class CountdownActivity extends AppCompatActivity {
 
             @Override
             public void onFinish() {
-                // The countdown has finished, you may want to handle it here
                 sendFallAlert();
             }
         };
@@ -58,8 +57,7 @@ public class CountdownActivity extends AppCompatActivity {
     }
 
     private void sendFallAlert() {
-        // Implement any additional logic related to sending the fall alert message
-        // This is where you can put the code from your MainActivity's sendFallAlert method
+
     }
     // In CountdownActivity.java
     public static Intent newIntent(Context context) {

@@ -44,20 +44,20 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == COUNTDOWN_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                // The user clicked "I'm Ok" in CountdownActivity
+
                 Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
             } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
-                // The user clicked "Send Fall Alert" in CountdownActivity
+
                 sendFallAlert();
             } else {
-                // The countdown elapsed without any action
-                sendFallAlert(); // You can adjust this behavior based on your requirements
+
+                sendFallAlert();
             }
         }
     }
 
     private void sendFallAlert() {
-        // Implement the logic to send the fall alert message
+
         EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
         String phoneNumber = editTextPhoneNumber.getText().toString();
         String message = getResources().getString(R.string.fall_message);

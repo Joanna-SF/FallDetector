@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#3498db">
@@ -9,30 +10,35 @@
         android:id="@+id/textCountdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+
+        android:layout_below="@+id/textFallAlert"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="173dp"
+        android:layout_marginTop="447dp"
+        android:layout_marginEnd="173dp"
         android:text="30"
-        android:textSize="24sp" />
+        android:textSize="50sp" />
 
     <TextView
         android:id="@+id/textFallAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textCountdown"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="25dp"
         android:text="Fall Alert!"
         android:textColor="#800080"
         android:textSize="36sp" />
 
     <Button
         android:id="@+id/buttonImOk"
-        android:layout_width="wrap_content"
+        android:layout_width="138dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/textFallAlert"
         android:layout_alignParentStart="true"
-        android:layout_marginStart="79dp"
-        android:layout_marginTop="99dp"
+        android:layout_marginStart="212dp"
+        android:layout_marginTop="250dp"
         android:layout_marginEnd="8dp"
         android:text="I'm Ok" />
 
@@ -43,8 +49,45 @@
         android:layout_below="@id/textFallAlert"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="101dp"
-        android:layout_marginEnd="77dp"
+        android:layout_marginTop="250dp"
+        android:layout_marginEnd="212dp"
         android:text="Send Fall Alert" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="149dp"
+        android:layout_height="149dp"
+        android:layout_below="@+id/textFallAlert"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="133dp"
+        android:layout_marginTop="55dp"
+        android:layout_marginEnd="133dp"
+        app:srcCompat="@drawable/img" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/textCountdown"
+        android:layout_marginBottom="501dp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="202dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageView"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="179dp"
+        android:layout_marginEnd="100dp"
+        android:gravity="fill"
+        android:text="Automatic Notification in"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
 
 </RelativeLayout>
