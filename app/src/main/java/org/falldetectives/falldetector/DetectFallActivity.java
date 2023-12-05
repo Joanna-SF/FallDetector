@@ -24,6 +24,7 @@ public class DetectFallActivity extends Activity {
     private BioLib.DataACC dataACC = null;
     private String accConf = "";
     private TextView textACC;
+    private TextView textACCFall;
     //Constants
     private static final int WINDOW_SIZE = 10;  // Window size for smoothing data
     private static final double FALL_THRESHOLD = 2.0;  // Threshold for fall detection
@@ -36,52 +37,53 @@ public class DetectFallActivity extends Activity {
 
     // Counter for consecutive readings indicating a fall
     private int fallCounter = 0;
+    private Handler handler = new Handler();
+
+    private int currentIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acc_data);
 
-        textACC= findViewById(R.id.acc_data);
-
-        // Example usage: Simulate real-time accelerometer data
         DetectFallActivity fallDetectionAlgorithm = new DetectFallActivity();
 
-        // Simulate accelerometer readings (replace with actual real-time data)
-        for (int i = 0; i < 20; i++) {
-            double x = Math.random() * 5;  // Simulate accelerometer reading on the x-axis
-            double y = Math.random() * 5;  // Simulate accelerometer reading on the y-axis
-            double z = Math.random() * 5;  // Simulate accelerometer reading on the z-axis
+        textACC= findViewById(R.id.acc_data);
+        textACCFall= findViewById(R.id.acc_fall);
 
-            /* if (msg.what == BioLib.MESSAGE_ACC_UPDATED) {
-                dataACC = (BioLib.DataACC) msg.obj;
-                if (accConf == "")
-                { textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z); }
-                else
-                {  textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);}
-
-                double x = dataACC.X;
-                double y = dataACC.Y;
-                double z = dataACC.Z;
-            }*/
-
-            textACC.setText("ACC:  X: "+x+" Y: "+y+"  Z: "+z);
-
-            // Process the simulated accelerometer data
-            fallDetectionAlgorithm.processAccelerometerData(x, y, z);
-
-            // Sleep to simulate real-time intervals between readings
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+        textACCFall.setText("onCreate");
+        simulateAccelerometerData();
         }
 
+
+
+    private void simulateAccelerometerData() {
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (currentIndex < 20) {
+                    double x = Math.random() * 5;
+                    double y = Math.random() * 5;
+                    double z = Math.random() * 5;
+
+                    textACCFall.setText("i: " + currentIndex);
+                    textACC.setText("ACC:  X: " + x + " Y: " + y + "  Z: " + z);
+
+                    processAccelerometerData(x, y, z);
+
+                    currentIndex++;
+
+                    simulateAccelerometerData(); // Schedule the next update
+                }
+            }
+        }, 1000); // Delay for 1 second
     }
+
 
     // Method to process real-time accelerometer data
     public void processAccelerometerData(double x, double y, double z) {
+        textACCFall.setText("processAccelerometerData");
         // Smooth the accelerometer data using a moving window
         double smoothedX = smoothData(x, xValues);
         double smoothedY = smoothData(y, yValues);
@@ -95,17 +97,20 @@ public class DetectFallActivity extends Activity {
             fallCounter++;
             if (fallCounter >= FALL_CONFIRMATION_COUNT) {
                 // Fall detected
-                System.out.println("Fall detected!");
+                textACCFall.setText("ACC:  Fall was detected!");
+
                 // Additional actions can be taken here (e.g., alerting emergency services)
             }
         } else {
             // Reset the fall counter if the magnitude is below the threshold
             fallCounter = 0;
+            textACCFall.setText("ACC:  Fall not detected!");
         }
     }
 
     // Method to smooth data using a moving window
     private double smoothData(double newValue, LinkedList<Double> values) {
+        textACCFall.setText("smoothData");
         values.addLast(newValue);
         if (values.size() > WINDOW_SIZE) {
             values.removeFirst();
@@ -125,8 +130,9 @@ public class DetectFallActivity extends Activity {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
-    public static void main(String[] args,Message msg, BioLib.DataACC dataACC, String accConf, TextView textACC) {
-        // Example usage: Simulate real-time accelerometer data
+    public static void main(String[] args, TextView textACC, TextView textACCFall) {
+        textACCFall.setText("main function");
+        // Example usage: Simulate real-time accelerometer
         DetectFallActivity fallDetectionAlgorithm = new DetectFallActivity();
 
         // Simulate accelerometer readings (replace with actual real-time data)
@@ -135,7 +141,9 @@ public class DetectFallActivity extends Activity {
             double y = Math.random() * 5;  // Simulate accelerometer reading on the y-axis
             double z = Math.random() * 5;  // Simulate accelerometer reading on the z-axis
 
-            /* if (msg.what == BioLib.MESSAGE_ACC_UPDATED) {
+            textACC.setText("ACC:  X: "+x+" Y: "+y+"  Z: "+z);
+
+             /* if (msg.what == BioLib.MESSAGE_ACC_UPDATED) {
                 dataACC = (BioLib.DataACC) msg.obj;
                 if (accConf == "")
                 { textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z); }
@@ -146,8 +154,6 @@ public class DetectFallActivity extends Activity {
                 double y = dataACC.Y;
                 double z = dataACC.Z;
             }*/
-
-            textACC.setText("ACC:  X: "+x+" Y: "+y+"  Z: "+z);
 
             // Process the simulated accelerometer data
             fallDetectionAlgorithm.processAccelerometerData(x, y, z);
@@ -160,7 +166,5 @@ public class DetectFallActivity extends Activity {
             }
         }
     }
-
-
 
 }
