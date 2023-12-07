@@ -45,8 +45,6 @@ public class DetectFallActivity extends Activity {
         textACCFall.setText("onCreate");
         //simulateAccelerometerData();
 
-
-
         //dataACC = (BioLib.DataACC) msg.obj;
         if (accConf == "")
         { textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z); }
@@ -57,8 +55,6 @@ public class DetectFallActivity extends Activity {
         double y = dataACC.Y;
         double z = dataACC.Z;
         }
-
-
 
     private void simulateAccelerometerData() {
         handler.postDelayed(new Runnable() {

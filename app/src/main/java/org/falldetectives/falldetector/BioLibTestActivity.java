@@ -1,8 +1,10 @@
 package org.falldetectives.falldetector;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import Bio.Library.namespace.BioLib;
 import android.app.Activity;
@@ -10,6 +12,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,8 +23,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class BioLibTestActivity extends Activity {
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
+public class BioLibTestActivity extends Activity {
+    // creating a variable
+    // for our graph view.
+    GraphView graphView;
     private BioLib lib = null;
     private String address = "";
     private String macaddress = "";
@@ -81,6 +90,12 @@ public class BioLibTestActivity extends Activity {
     private LinkedList<Double> xValues = new LinkedList<>();
     private LinkedList<Double> yValues = new LinkedList<>();
     private LinkedList<Double> zValues = new LinkedList<>();
+    LineGraphSeries<DataPoint> seriesX, seriesY, seriesZ, seriesMag;
+    private List<DataPoint> dataPointsX = new ArrayList<>();
+    private List<DataPoint> dataPointsY = new ArrayList<>();
+    private List<DataPoint> dataPointsZ = new ArrayList<>();
+    private List<DataPoint> dataPointsMag = new ArrayList<>();
+
 
     // Counter for consecutive readings indicating a fall
     private int fallCounter = 0;
@@ -95,6 +110,31 @@ public class BioLibTestActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
+        // on below line we are initializing our graph view.
+        graphView = findViewById(R.id.idGraphView);
+        // title for our graph view.
+        graphView.setTitle("My Graph View");
+        // text color to our graph view.
+        //graphView.setTitleColor(R.color.purple_200);
+        // our title text size.
+        graphView.setTitleTextSize(18);
+
+        // Set up colors for each series
+        int colorX = Color.BLUE;
+        int colorY = Color.GREEN;
+        int colorZ = Color.RED;
+        int colorMag = Color.YELLOW;
+
+        // Initialize series
+        seriesX = new LineGraphSeries<>(dataPointsX.toArray(new DataPoint[0]));
+        seriesY = new LineGraphSeries<>(dataPointsY.toArray(new DataPoint[0]));
+        seriesZ = new LineGraphSeries<>(dataPointsZ.toArray(new DataPoint[0]));
+        seriesMag = new LineGraphSeries<>(dataPointsMag.toArray(new DataPoint[0]));
+        seriesX.setColor(colorX);
+        seriesY.setColor(colorY);
+        seriesZ.setColor(colorZ);
+        seriesMag.setColor(colorMag);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -601,6 +641,7 @@ public class BioLibTestActivity extends Activity {
                     double x = dataACC.X;
                     double y = dataACC.Y;
                     double z = dataACC.Z;
+                    double c = System.currentTimeMillis();
 
                     if (accConf == "")
                         textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
@@ -618,7 +659,6 @@ public class BioLibTestActivity extends Activity {
                             Log.d("YourTag", "Fall detected");
                             textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
 
-
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
                     } else {
@@ -630,9 +670,35 @@ public class BioLibTestActivity extends Activity {
                     }
 
                     //textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+                    // on below line we are adding data to our graph view.
+
+                    // Inside your real-time data update loop
+                    dataPointsX.add(new DataPoint(x, c));
+                    dataPointsY.add(new DataPoint(y, c));
+                    dataPointsZ.add(new DataPoint(z, c));
+                    dataPointsMag.add(new DataPoint(accelerationMagnitude, c));
+
+                    // Limit the number of data points to display (e.g., keep the last N points)
+                    int maxDataPoints = 100; // Adjust as needed
+
+                    if (dataPointsX.size() > maxDataPoints) {
+                        dataPointsX.remove(0);
+                        dataPointsY.remove(0);
+                        dataPointsZ.remove(0);
+                        dataPointsMag.remove(0);
+                    }
+
+                    // Update the series with the new data
+                    seriesX.resetData(dataPointsX.toArray(new DataPoint[0]));
+                    seriesY.resetData(dataPointsY.toArray(new DataPoint[0]));
+                    seriesZ.resetData(dataPointsZ.toArray(new DataPoint[0]));
+                    seriesMag.resetData(dataPointsMag.toArray(new DataPoint[0]));
 
 
-
+                    graphView.addSeries(seriesX);
+                    graphView.addSeries(seriesY);
+                    graphView.addSeries(seriesZ);
+                    graphView.addSeries(seriesMag);
 
                     break;
 
@@ -675,7 +741,6 @@ public class BioLibTestActivity extends Activity {
 
         // Calculate the magnitude of the acceleration vector
         double accelerationMagnitude = calculateAccelerationMagnitude(smoothedX, smoothedY, smoothedZ);
-
 
         return accelerationMagnitude;
 
