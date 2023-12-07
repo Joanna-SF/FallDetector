@@ -133,6 +133,18 @@
             android:text="ACC: - - -" />
 
         <TextView
+            android:id="@+id/ACC_fall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lblBAT"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="121dp"
+            android:layout_marginRight="0dp"
+            android:text="Fall:" />
+
+        <TextView
             android:id="@+id/lblECG"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

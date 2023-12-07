@@ -2,6 +2,8 @@ package org.falldetectives.falldetector;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.LinkedList;
+
 import Bio.Library.namespace.BioLib;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -11,6 +13,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -70,6 +73,20 @@ public class BioLibTestActivity extends Activity {
     private byte[][] ecg = null;
     private int nBytes = 0;
     private String accConf = "";
+    public static TextView textACCFall;
+
+    private static final int WINDOW_SIZE = 10;  // Window size for smoothing data
+    private static final double FALL_THRESHOLD = 2.0;  // Threshold for fall detection
+    private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
+    private LinkedList<Double> xValues = new LinkedList<>();
+    private LinkedList<Double> yValues = new LinkedList<>();
+    private LinkedList<Double> zValues = new LinkedList<>();
+
+    // Counter for consecutive readings indicating a fall
+    private int fallCounter = 0;
+    private Handler handler = new Handler();
+
+    private int currentIndex = 0;
 
 
     /** Called when the activity is first created. */
@@ -102,6 +119,8 @@ public class BioLibTestActivity extends Activity {
         textDeviceId = (TextView) findViewById(R.id.lblDeviceId);
         textRadioEvent = (TextView) findViewById(R.id.textRadioEvent);
         textTimeSpan  = (TextView) findViewById(R.id.lblTimeSpan);
+
+        textACCFall= findViewById(R.id.ACC_fall);
 
         try
         {
@@ -315,6 +334,9 @@ public class BioLibTestActivity extends Activity {
         buttonSetLabel.setEnabled(false);
         buttonGetDeviceId.setEnabled(false);
         buttonGetAcc.setEnabled(false);
+
+
+
     }
 
     public void OnDestroy()
@@ -576,10 +598,41 @@ public class BioLibTestActivity extends Activity {
                 case BioLib.MESSAGE_ACC_UPDATED:
                     dataACC = (BioLib.DataACC)msg.obj;
 
+                    double x = dataACC.X;
+                    double y = dataACC.Y;
+                    double z = dataACC.Z;
+
                     if (accConf == "")
                         textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
                     else
                         textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
+
+                    //textACCFall.setText("ACC:  Start processing");
+                    Log.d("YourTag", "Fall test -detected");
+                    double accelerationMagnitude= processAccelerometerData(x, y, z);
+                    // Check if the magnitude indicates a fall
+                    if (accelerationMagnitude > FALL_THRESHOLD) {
+                        fallCounter++;
+                        if (fallCounter >= FALL_CONFIRMATION_COUNT) {
+                            // Fall detected
+                            Log.d("YourTag", "Fall detected");
+                            textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
+
+                            // Additional actions can be taken here (e.g., alerting emergency services)
+                        }
+                    } else {
+                        // Reset the fall counter if the magnitude is below the threshold
+                        fallCounter = 0;
+                        Log.d("YourTag", "Fall not detected");
+                        textACCFall.setText("ACC:  Fall not detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
+                    }
+
+                    //textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
+
+
 
                     break;
 
@@ -604,6 +657,54 @@ public class BioLibTestActivity extends Activity {
             }
         }
     };
+
+    // Method to process real-time accelerometer data
+    public static double processAccelerometerData(double x, double y, double z) {
+        //textACCFall.setText("processAccelerometerData");
+        Log.d("YourTag", "Fall detected");
+        LinkedList<Double> xValues = new LinkedList<>();
+        LinkedList<Double> yValues = new LinkedList<>();
+        LinkedList<Double> zValues = new LinkedList<>();
+        int fallCounter = 0;
+        int fall=0;
+
+        // Smooth the accelerometer data using a moving window
+        double smoothedX = smoothData(x, xValues);
+        double smoothedY = smoothData(y, yValues);
+        double smoothedZ = smoothData(z, zValues);
+
+        // Calculate the magnitude of the acceleration vector
+        double accelerationMagnitude = calculateAccelerationMagnitude(smoothedX, smoothedY, smoothedZ);
+
+
+        return accelerationMagnitude;
+
+    }
+
+    // Method to smooth data using a moving window
+    private static double smoothData(double newValue, LinkedList<Double> values) {
+        //textACCFall.setText("smoothData");
+        values.addLast(newValue);
+        if (values.size() > WINDOW_SIZE) {
+            values.removeFirst();
+        }
+
+        // Calculate the average of the values in the window
+        double sum = 0;
+        for (double value : values) {
+            sum += value;
+        }
+
+        return sum / values.size();
+    }
+
+    // Method to calculate the magnitude of the acceleration vector
+    private static double calculateAccelerationMagnitude(double x, double y, double z) {
+        return Math.sqrt(x * x + y * y + z * z);
+    }
+
+
+
 
     /*
      *

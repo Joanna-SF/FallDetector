@@ -1,23 +1,13 @@
 package org.falldetectives.falldetector;
 
 import android.app.Activity;
-import java.io.UnsupportedEncodingException;
-import java.util.Date;
+
 import java.util.LinkedList;
 import Bio.Library.namespace.BioLib;
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
+
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 public class DetectFallActivity extends Activity {
@@ -28,7 +18,7 @@ public class DetectFallActivity extends Activity {
     //Constants
     private static final int WINDOW_SIZE = 10;  // Window size for smoothing data
     private static final double FALL_THRESHOLD = 2.0;  // Threshold for fall detection
-    private static final int FALL_CONFIRMATION_COUNT = 3;  // Number of consecutive readings to confirm a fall
+    private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
 
     // Data structures for storing accelerometer readings
     private LinkedList<Double> xValues = new LinkedList<>();
@@ -53,7 +43,19 @@ public class DetectFallActivity extends Activity {
         textACCFall= findViewById(R.id.acc_fall);
 
         textACCFall.setText("onCreate");
-        simulateAccelerometerData();
+        //simulateAccelerometerData();
+
+
+
+        //dataACC = (BioLib.DataACC) msg.obj;
+        if (accConf == "")
+        { textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z); }
+        else
+        {  textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);}
+
+        double x = dataACC.X;
+        double y = dataACC.Y;
+        double z = dataACC.Z;
         }
 
 
@@ -82,8 +84,14 @@ public class DetectFallActivity extends Activity {
 
 
     // Method to process real-time accelerometer data
-    public void processAccelerometerData(double x, double y, double z) {
-        textACCFall.setText("processAccelerometerData");
+    public static int processAccelerometerData(double x, double y, double z) {
+        //textACCFall.setText("processAccelerometerData");
+        LinkedList<Double> xValues = new LinkedList<>();
+        LinkedList<Double> yValues = new LinkedList<>();
+        LinkedList<Double> zValues = new LinkedList<>();
+        int fallCounter = 0;
+        int fall=0;
+
         // Smooth the accelerometer data using a moving window
         double smoothedX = smoothData(x, xValues);
         double smoothedY = smoothData(y, yValues);
@@ -97,20 +105,25 @@ public class DetectFallActivity extends Activity {
             fallCounter++;
             if (fallCounter >= FALL_CONFIRMATION_COUNT) {
                 // Fall detected
-                textACCFall.setText("ACC:  Fall was detected!");
+                fall=1;
+                BioLibTestActivity.textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
 
                 // Additional actions can be taken here (e.g., alerting emergency services)
             }
         } else {
             // Reset the fall counter if the magnitude is below the threshold
             fallCounter = 0;
-            textACCFall.setText("ACC:  Fall not detected!");
+            fall=0;
+            BioLibTestActivity.textACCFall.setText("ACC:  Fall not detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
         }
+        return fall;
     }
 
     // Method to smooth data using a moving window
-    private double smoothData(double newValue, LinkedList<Double> values) {
-        textACCFall.setText("smoothData");
+    private static double smoothData(double newValue, LinkedList<Double> values) {
+        //textACCFall.setText("smoothData");
         values.addLast(newValue);
         if (values.size() > WINDOW_SIZE) {
             values.removeFirst();
@@ -126,7 +139,7 @@ public class DetectFallActivity extends Activity {
     }
 
     // Method to calculate the magnitude of the acceleration vector
-    private double calculateAccelerationMagnitude(double x, double y, double z) {
+    private static double calculateAccelerationMagnitude(double x, double y, double z) {
         return Math.sqrt(x * x + y * y + z * z);
     }
 
