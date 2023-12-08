@@ -25,6 +25,7 @@ import android.widget.Toast;
 import android.content.Context;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
@@ -685,30 +686,42 @@ public class BioLibTestActivity extends Activity {
                     /*dataPointsX.add(new DataPoint(x, c));
                     dataPointsY.add(new DataPoint(y, c));
                     dataPointsZ.add(new DataPoint(z, c));
-                    dataPointsMag.add(new DataPoint(accelerationMagnitude, c));
+
+                     */
+                    dataPointsMag.add(new DataPoint(c, accelerationMagnitude));
 
                     // Limit the number of data points to display (e.g., keep the last N points)
-                    int maxDataPoints = 100; // Adjust as needed
+                    int maxDataPoints = 200; // Adjust as needed
 
                     if (dataPointsX.size() > maxDataPoints) {
-                        dataPointsX.remove(0);
+                        /*dataPointsX.remove(0);
                         dataPointsY.remove(0);
-                        dataPointsZ.remove(0);
+                        dataPointsZ.remove(0);*/
                         dataPointsMag.remove(0);
                     }
 
                     // Update the series with the new data
-                    seriesX.resetData(dataPointsX.toArray(new DataPoint[0]));
+                    /*seriesX.resetData(dataPointsX.toArray(new DataPoint[0]));
                     seriesY.resetData(dataPointsY.toArray(new DataPoint[0]));
                     seriesZ.resetData(dataPointsZ.toArray(new DataPoint[0]));
-                    seriesMag.resetData(dataPointsMag.toArray(new DataPoint[0]));
 
+                     */
+                    seriesMag.appendData( new DataPoint(c, accelerationMagnitude), true, maxDataPoints);
 
-                    graphView.addSeries(seriesX);
+                    // Set the static label formatter for the X-axis to display time
+                    StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graphView);
+                    staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""}); // Clear existing labels
+                    graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
+
+                    graphView.getViewport().setYAxisBoundsManual(true);
+                    graphView.getViewport().setMinY(0);
+                    graphView.getViewport().setMaxY(200);
+
+                    /*graphView.addSeries(seriesX);
                     graphView.addSeries(seriesY);
-                    graphView.addSeries(seriesZ);
+                    graphView.addSeries(seriesZ);*/
                     graphView.addSeries(seriesMag);
-                    */
+
 
 
                     break;
@@ -753,7 +766,9 @@ public class BioLibTestActivity extends Activity {
 
         // Calculate the magnitude of the acceleration vector
         double accelerationMagnitude = calculateAccelerationMagnitude(smoothedX, smoothedY, smoothedZ);
-
+        if (Double.isNaN(accelerationMagnitude)) {
+            accelerationMagnitude = 0;
+        }
         return accelerationMagnitude;
 
     }
@@ -777,9 +792,8 @@ public class BioLibTestActivity extends Activity {
 
     // Method to calculate the magnitude of the acceleration vector
     private static double calculateAccelerationMagnitude(double x, double y, double z) {
-         double accel= Math.sqrt(x * x + y * y + z * z - 32*32) ;
 
-        return accel;
+        return Math.sqrt(x * x + y * y + z * z - 32*32) ;
     }
 
 
