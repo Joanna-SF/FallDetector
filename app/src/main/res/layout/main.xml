@@ -5,10 +5,18 @@
     android:orientation="vertical" >
 
 
+
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_weight="0.69">
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/idGraphView"
+            android:layout_width="match_parent"
+            android:layout_height="238dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="344dp" />
 
         <Button
             android:id="@+id/buttonSetRTC"
@@ -268,14 +276,12 @@
             android:layout_alignRight="@+id/buttonGetDeviceId"
             android:text="Get ACC" />
 
-        <com.jjoe64.graphview.GraphView
-            android:id="@+id/idGraphView"
-            android:layout_width="match_parent"
-            android:layout_height="249dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="344dp" />
+
 
     </RelativeLayout>
+
+
+
 
     <!--line graph view where we will
        be displaying our data-->

@@ -22,10 +22,13 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
+
+
 
 public class BioLibTestActivity extends Activity {
     // creating a variable
@@ -84,8 +87,8 @@ public class BioLibTestActivity extends Activity {
     private String accConf = "";
     public static TextView textACCFall;
 
-    private static final int WINDOW_SIZE = 10;  // Window size for smoothing data
-    private static final double FALL_THRESHOLD = 2.0;  // Threshold for fall detection
+    private static final int WINDOW_SIZE = 20;  // Window size for smoothing data
+    private static final double FALL_THRESHOLD = 70.0;  // Threshold for fall detection
     private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
     private LinkedList<Double> xValues = new LinkedList<>();
     private LinkedList<Double> yValues = new LinkedList<>();
@@ -648,32 +651,38 @@ public class BioLibTestActivity extends Activity {
                     else
                         textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
 
-                    //textACCFall.setText("ACC:  Start processing");
-                    Log.d("YourTag", "Fall test -detected");
                     double accelerationMagnitude= processAccelerometerData(x, y, z);
                     // Check if the magnitude indicates a fall
+                    textACCFall.setText("ACC Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+
+                    //possible fall detected
                     if (accelerationMagnitude > FALL_THRESHOLD) {
                         fallCounter++;
+
                         if (fallCounter >= FALL_CONFIRMATION_COUNT) {
                             // Fall detected
-                            Log.d("YourTag", "Fall detected");
-                            textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+                            //Log.d("YourTag", "Fall detected");
+                            textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+                            Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
-                    } else {
+                    }
+
+                        //not a fall
+                     else {
                         // Reset the fall counter if the magnitude is below the threshold
                         fallCounter = 0;
-                        Log.d("YourTag", "Fall not detected");
-                        textACCFall.setText("ACC:  Fall not detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
+                        //Log.d("YourTag", "Fall not detected");
+                        textACCFall.setText("Magnitude: "+accelerationMagnitude);
+                        }
 
-                    }
 
                     //textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
                     // on below line we are adding data to our graph view.
 
-                    // Inside your real-time data update loop
-                    dataPointsX.add(new DataPoint(x, c));
+                    //Inside your real-time data update loop
+                    /*dataPointsX.add(new DataPoint(x, c));
                     dataPointsY.add(new DataPoint(y, c));
                     dataPointsZ.add(new DataPoint(z, c));
                     dataPointsMag.add(new DataPoint(accelerationMagnitude, c));
@@ -699,6 +708,8 @@ public class BioLibTestActivity extends Activity {
                     graphView.addSeries(seriesY);
                     graphView.addSeries(seriesZ);
                     graphView.addSeries(seriesMag);
+                    */
+
 
                     break;
 
@@ -719,6 +730,7 @@ public class BioLibTestActivity extends Activity {
 
                 case BioLib.MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
+
                     break;
             }
         }
@@ -765,15 +777,12 @@ public class BioLibTestActivity extends Activity {
 
     // Method to calculate the magnitude of the acceleration vector
     private static double calculateAccelerationMagnitude(double x, double y, double z) {
-        return Math.sqrt(x * x + y * y + z * z);
+         double accel= Math.sqrt(x * x + y * y + z * z - 32*32) ;
+
+        return accel;
     }
 
 
-
-
-    /*
-     *
-     */
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         switch (requestCode)
