@@ -54,4 +54,32 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
 
     }
+    public List<UserModel> getEveryone(){
+        List<UserModel> returnList = new ArrayList<>();
+
+        //get data from database
+        String queryString= "SELECT * FROM " + USER_TABLE;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(queryString,null);
+        if (cursor.moveToFirst()){
+            // loop through the results and create new user objects
+            do{
+                int userID=cursor.getInt(0);
+                String userName=cursor.getString(1);
+                String userAge=cursor.getString(2);
+                String userBloodType=cursor.getString(3);
+                int userEmergencyContact=cursor.getInt(4);
+
+
+                UserModel newUser=new UserModel(userID, userName,userAge,userBloodType,userEmergencyContact);
+                returnList.add(newUser);
+            }while(cursor.moveToNext());
+        }
+        else{
+            // do not add anything to the list
+        }
+        cursor.close();
+        db.close();
+        return returnList;
+    }
 }

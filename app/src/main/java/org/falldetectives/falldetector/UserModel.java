@@ -11,7 +11,7 @@ public class UserModel implements Serializable {
 
     //constructors
 
-    public UserModel(int ID, String name, String degree, String current_activity, String email, int phone_number, String socialMediaURL) {
+    public UserModel(int ID, String name, String age, String blood_type, int emergency_contact) {
         this.name = name;
         this.age = age;
         this.blood_type = blood_type;
