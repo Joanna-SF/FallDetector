@@ -1,8 +1,11 @@
 package org.falldetectives.falldetector;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,5 +26,18 @@ public class RegisteredUserActivity extends AppCompatActivity {
         List<UserModel> everyone = userDatabase.getEveryone();
         ArrayAdapter<UserModel> userArrayAdapter = new ArrayAdapter<>(RegisteredUserActivity.this, android.R.layout.simple_list_item_1, everyone);
         user_list.setAdapter(userArrayAdapter);
+
+        user_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                UserModel selectedUser = (UserModel) parent.getItemAtPosition(position);
+
+                // Start MainActivity and pass the selected user
+
+                Intent intent = new Intent(RegisteredUserActivity.this, MainActivity.class);
+                intent.putExtra("SELECTED_USER", selectedUser);
+                startActivity(intent);
+            }
+        });
     }
 }
