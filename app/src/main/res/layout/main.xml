@@ -23,6 +23,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="18dp"
             android:text="Set RTC" />
 
         <Button
@@ -31,6 +32,8 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/buttonSetRTC"
             android:layout_alignParentLeft="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginBottom="16dp"
             android:text="Connect" />
 
         <Button
@@ -38,6 +41,8 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/buttonSetRTC"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="16dp"
             android:layout_toRightOf="@+id/buttonConnect"
             android:text="Disconnect" />
 
@@ -47,6 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/buttonDisconnect"
             android:layout_alignBottom="@+id/buttonDisconnect"
+            android:layout_marginLeft="2dp"
+            android:layout_marginBottom="7dp"
             android:layout_toRightOf="@+id/buttonDisconnect"
             android:text="Get RTC" />
 
@@ -66,6 +73,9 @@
             android:layout_alignLeft="@+id/buttonGetRTC"
             android:layout_alignTop="@+id/buttonSetRTC"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="-2dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginBottom="14dp"
             android:text="Request Info" />
 
         <Button
@@ -84,6 +94,10 @@
             android:layout_alignTop="@+id/buttonSetRTC"
             android:layout_alignRight="@+id/buttonDisconnect"
             android:layout_alignParentBottom="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="-15dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="14dp"
             android:text="Set RadioEvent" />
 
         <Button
@@ -93,9 +107,9 @@
             android:layout_above="@+id/buttonGetRTC"
             android:layout_alignLeft="@+id/buttonGetRTC"
             android:layout_alignRight="@+id/buttonGetRTC"
-            android:layout_marginLeft="110dp"
-            android:layout_marginRight="-110dp"
-            android:layout_marginBottom="-106dp"
+            android:layout_marginLeft="99dp"
+            android:layout_marginRight="-99dp"
+            android:layout_marginBottom="-124dp"
             android:text="Get DeviceId" />
 
         <TextView
@@ -274,8 +288,10 @@
             android:layout_above="@+id/buttonGetDeviceId"
             android:layout_alignLeft="@+id/buttonGetDeviceId"
             android:layout_alignRight="@+id/buttonGetDeviceId"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="-2dp"
             android:text="Get ACC" />
-
 
 
     </RelativeLayout>

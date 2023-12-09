@@ -89,7 +89,9 @@ public class BioLibTestActivity extends Activity {
     public static TextView textACCFall;
 
     private static final int WINDOW_SIZE = 20;  // Window size for smoothing data
-    private static final double FALL_THRESHOLD = 70.0;  // Threshold for fall detection
+    private static final double FALL_THRESHOLD_1 = 70.0;  // Threshold for fall detection
+    private static final double FALL_THRESHOLD_2 = 200.0;  // Threshold for fall detection
+
     private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
     private LinkedList<Double> xValues = new LinkedList<>();
     private LinkedList<Double> yValues = new LinkedList<>();
@@ -379,8 +381,6 @@ public class BioLibTestActivity extends Activity {
         buttonGetDeviceId.setEnabled(false);
         buttonGetAcc.setEnabled(false);
 
-
-
     }
 
     public void OnDestroy()
@@ -657,7 +657,7 @@ public class BioLibTestActivity extends Activity {
                     textACCFall.setText("ACC Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
 
                     //possible fall detected
-                    if (accelerationMagnitude > FALL_THRESHOLD) {
+                    if (accelerationMagnitude > FALL_THRESHOLD_1) {
                         fallCounter++;
 
                         if (fallCounter >= FALL_CONFIRMATION_COUNT) {
@@ -666,8 +666,18 @@ public class BioLibTestActivity extends Activity {
                             textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                             Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
+                            Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                            startActivity(intent);
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
+                    }
+
+                    else if (accelerationMagnitude > FALL_THRESHOLD_2) {
+                        textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+                        Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
+
+                        Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                        startActivity(intent);
                     }
 
                         //not a fall

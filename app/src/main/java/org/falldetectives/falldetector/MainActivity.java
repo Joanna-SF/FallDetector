@@ -27,24 +27,25 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonACCData = findViewById(R.id.ACCdata);
+        //Button buttonACCData = findViewById(R.id.ACCdata);
         Button buttonBioLib = findViewById(R.id.biolib);
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
 
-        buttonACCData.setOnClickListener(new View.OnClickListener() {
+        /*buttonACCData.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, DetectFallActivity.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
         buttonBioLib.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
                 startActivity(intent);
+
             }
 
         });
