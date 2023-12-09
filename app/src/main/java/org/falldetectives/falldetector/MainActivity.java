@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     TextView personEmergencyContact;
+    TextView personName;
     private static final int COUNTDOWN_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         personEmergencyContact = findViewById(R.id.editTextPhone);
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
+        personName=findViewById(R.id.textView13);
 
         // Check for SMS permission
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
@@ -41,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
             UserModel selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
 
             personEmergencyContact.setText(String.valueOf(selectedUser.getEmergency_contact()));
+            String welcomeMessage = "Welcome, " + selectedUser.getName() + " !";
+            personName.setText(welcomeMessage);
+
+            //personName.setText(String.valueOf((selectedUser.getName())));
+
 
 
         }
