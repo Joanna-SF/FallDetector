@@ -25,13 +25,14 @@
         tools:targetApi="31">
 
         <activity
-            android:name=".MainActivity"
+            android:name=".EnterInAppActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
 
         <activity
             android:name=".BioLibTestActivity"
@@ -65,9 +66,11 @@
         </activity>
 
 
-        <!-- Add the CountdownActivity declaration here -->
-        <activity
-            android:name=".CountdownActivity"
+
+        <activity android:name=".NewUserActivity" />
+        <activity android:name=".RegisteredUserActivity" />
+        <activity android:name=".MainActivity" />
+        <activity android:name=".CountdownActivity"
             android:exported="true" />
 
     </application>

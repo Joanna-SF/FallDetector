@@ -21,16 +21,23 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
+    TextView personEmergencyContact;
+    TextView personName;
     private static final int COUNTDOWN_REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
         Button buttonBioLib = findViewById(R.id.biolib_user);
+
+        personEmergencyContact = findViewById(R.id.editTextPhone);
+
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
+        personName=findViewById(R.id.textView13);
 
         buttonBioLibDeveloper.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
@@ -54,6 +61,20 @@ public class MainActivity extends AppCompatActivity {
                 != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.SEND_SMS}, 1);
+        }
+
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("SELECTED_USER")) {
+            UserModel selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
+
+            personEmergencyContact.setText(String.valueOf(selectedUser.getEmergency_contact()));
+            String welcomeMessage = "Welcome, " + selectedUser.getName() + " !";
+            personName.setText(welcomeMessage);
+
+            //personName.setText(String.valueOf((selectedUser.getName())));
+
+
+
         }
     }
 

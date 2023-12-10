@@ -23,5 +23,7 @@
     <string name="title_activity_detect_fall">DetectFallActivity </string>
     <string name="biolib_developer">Developer</string>
 
+    <string name="welcome_message">Welcome, %1$s!</string>
+
 
 </resources>
