@@ -33,7 +33,6 @@ import Bio.Library.namespace.BioLib;
 public class BioLibUserActivity extends Activity {
     // creating a variable
     // for our graph view.
-    GraphView graphView;
     private BioLib lib = null;
     private String address = "";
     private String macaddress = "";
@@ -88,7 +87,7 @@ public class BioLibUserActivity extends Activity {
     private LinkedList<Double> xValues = new LinkedList<>();
     private LinkedList<Double> yValues = new LinkedList<>();
     private LinkedList<Double> zValues = new LinkedList<>();
-    LineGraphSeries<DataPoint> seriesX, seriesY, seriesZ, seriesMag;
+
     private List<DataPoint> dataPointsX = new ArrayList<>();
     private List<DataPoint> dataPointsY = new ArrayList<>();
     private List<DataPoint> dataPointsZ = new ArrayList<>();
@@ -108,31 +107,6 @@ public class BioLibUserActivity extends Activity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_user);
-
-        // on below line we are initializing our graph view.
-        graphView = findViewById(R.id.idGraphView);
-        // title for our graph view.
-        graphView.setTitle("My Graph View");
-        // text color to our graph view.
-        //graphView.setTitleColor(R.color.purple_200);
-        // our title text size.
-        graphView.setTitleTextSize(18);
-
-        // Set up colors for each series
-        int colorX = Color.BLUE;
-        int colorY = Color.GREEN;
-        int colorZ = Color.RED;
-        int colorMag = Color.YELLOW;
-
-        // Initialize series
-        seriesX = new LineGraphSeries<>(dataPointsX.toArray(new DataPoint[0]));
-        seriesY = new LineGraphSeries<>(dataPointsY.toArray(new DataPoint[0]));
-        seriesZ = new LineGraphSeries<>(dataPointsZ.toArray(new DataPoint[0]));
-        seriesMag = new LineGraphSeries<>(dataPointsMag.toArray(new DataPoint[0]));
-        seriesX.setColor(colorX);
-        seriesY.setColor(colorY);
-        seriesZ.setColor(colorZ);
-        seriesMag.setColor(colorMag);
 
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -494,20 +468,6 @@ public class BioLibUserActivity extends Activity {
                     if (dataPointsX.size() > maxDataPoints) {
                         dataPointsMag.remove(0);
                     }
-
-                    // Update the series with the new data
-                    seriesMag.appendData( new DataPoint(c, accelerationMagnitude), true, maxDataPoints);
-
-                    // Set the static label formatter for the X-axis to display time
-                    StaticLabelsFormatter staticLabelsFormatter = new StaticLabelsFormatter(graphView);
-                    staticLabelsFormatter.setHorizontalLabels(new String[]{"", ""}); // Clear existing labels
-                    graphView.getGridLabelRenderer().setLabelFormatter(staticLabelsFormatter);
-
-                    graphView.getViewport().setYAxisBoundsManual(true);
-                    graphView.getViewport().setMinY(0);
-                    graphView.getViewport().setMaxY(200);
-
-                    graphView.addSeries(seriesMag);
 
                     break;
 
