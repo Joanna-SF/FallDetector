@@ -1,12 +1,5 @@
 package org.falldetectives.falldetector;
 
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import Bio.Library.namespace.BioLib;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,16 +15,22 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
+import Bio.Library.namespace.BioLib;
 
 
-public class BioLibTestActivity extends Activity {
+public class BioLibUserActivity extends Activity {
     // creating a variable
     // for our graph view.
     GraphView graphView;
@@ -45,26 +44,19 @@ public class BioLibTestActivity extends Activity {
     public static final String TOAST = "toast";
 
     private TextView text;
-    private TextView textRTC;
-    private TextView textPUSH;
-    private TextView textPULSE;
-    private TextView textBAT;
-    private TextView textDataReceived;
-    private TextView textSDCARD;
     private TextView textACC;
-    private TextView textHR;
-    private TextView textECG;
-    private TextView textDeviceId;
-    private TextView textRadioEvent;
+    private TextView textDataReceived;
+    private TextView textBAT;
     private TextView textTimeSpan;
+    private TextView textPULSE;
+    private TextView textDeviceId;
+
+
+
 
     private Button buttonConnect;
     private Button buttonDisconnect;
-    private Button buttonGetRTC;
-    private Button buttonSetRTC;
-    private Button buttonRequest;
     private Button buttonSearch;
-    private Button buttonSetLabel;
     private Button buttonGetDeviceId;
     private Button buttonGetAcc;
 
@@ -115,7 +107,7 @@ public class BioLibTestActivity extends Activity {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.main_user);
 
         // on below line we are initializing our graph view.
         graphView = findViewById(R.id.idGraphView);
@@ -150,29 +142,13 @@ public class BioLibTestActivity extends Activity {
         // MACADDRESS:
         address = "00:23:FE:00:0B:59";
         // ###################################################
-
-        //manter
-        textACCFall= findViewById(R.id.ACC_fall);
-
-        textACC = (TextView) findViewById(R.id.lblACC);
-
-        //tirar
         textDataReceived = (TextView) findViewById(R.id.lblData);
-
         text = (TextView) findViewById(R.id.lblStatus);
-        text.setText("");
-        textSDCARD = (TextView) findViewById(R.id.lblSDCARD);
-        textPUSH = (TextView) findViewById(R.id.lblButton);
-        textPULSE = (TextView) findViewById(R.id.lblPulse);
         textBAT = (TextView) findViewById(R.id.lblBAT);
-        textRTC = (TextView) findViewById(R.id.lblRTC);
-        textHR = (TextView) findViewById(R.id.lblHR);
-        textECG = (TextView) findViewById(R.id.lblECG);
         textDeviceId = (TextView) findViewById(R.id.lblDeviceId);
-        textRadioEvent = (TextView) findViewById(R.id.textRadioEvent);
-        textTimeSpan  = (TextView) findViewById(R.id.lblTimeSpan);
-
-
+        text.setText("");
+        textACCFall= findViewById(R.id.ACC_fall);
+        textACC = (TextView) findViewById(R.id.lblACC);
 
 
         try
@@ -220,60 +196,6 @@ public class BioLibTestActivity extends Activity {
             }
         });
 
-        buttonSetRTC = (Button) findViewById(R.id.buttonSetRTC);
-        buttonSetRTC.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                try
-                {
-                    Date date = new Date();
-                    lib.SetRTC(date);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        buttonGetRTC = (Button) findViewById(R.id.buttonGetRTC);
-        buttonGetRTC.setOnClickListener(new View.OnClickListener() {
-        public void onClick(View view) {
-                try {
-                    lib.GetRTC();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        buttonRequest = (Button) findViewById(R.id.buttonRequestData);
-        buttonRequest.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                RequestData();
-            }
-
-            private void RequestData()
-            {
-                try
-                {
-                    deviceToConnect =  lib.mBluetoothAdapter.getRemoteDevice(address);
-
-                    Reset();
-                    text.setText("");
-                    lib.Request(address, 30);
-                }
-                catch (Exception ex)
-                {
-                    ex.printStackTrace();
-                }
-            }
-        });
 
         buttonSearch = (Button) findViewById(R.id.buttonSearch);
         buttonSearch.setOnClickListener(new View.OnClickListener()
@@ -300,52 +222,6 @@ public class BioLibTestActivity extends Activity {
             }
         });
 
-        buttonSetLabel = (Button) findViewById(R.id.buttonSetLabel);
-        buttonSetLabel.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                try
-                {
-            		/*
-            		// SAMPLE 1: Sample of radio event: send array of bytes (10Bytes maximum)
-            		byte type = 1;
-            		// Maximum 10 bytes to send device [Optional]
-            		byte[] info = new byte[4];
-            		info[0] = 0x31; // 1 ascii table
-            		info[1] = 0x32; // 2 ascii table
-            		info[2] = 0x33; // 3 ascii table
-            		info[3] = 0x34; // 4 ascii table
-
-            		textRadioEvent.setText("Start send");
-					if (lib.SetBytesToRadioEvent(type, info))
-					{
-						countEvent++;
-						textRadioEvent.setText("REvent: " + countEvent);
-					}
-					else
-						textRadioEvent.setText("Error");
-					*/
-
-                    // SAMPLE 2: Sample of radio event: send string (10 char maximum)
-                    byte type = 2;
-                    String info = "5678";
-                    textRadioEvent.setText("Start send");
-                    if (lib.SetStringToRadioEvent(type, info))
-                    {
-                        countEvent++;
-                        textRadioEvent.setText("REvent: " + countEvent);
-                    }
-                    else
-                        textRadioEvent.setText("Error");
-
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         buttonGetDeviceId = (Button) findViewById(R.id.buttonGetDeviceId);
         buttonGetDeviceId.setOnClickListener(new View.OnClickListener()
@@ -363,30 +239,10 @@ public class BioLibTestActivity extends Activity {
             }
         });
 
-        buttonGetAcc = (Button) findViewById(R.id.buttonGetAcc);
-        buttonGetAcc.setOnClickListener(new View.OnClickListener()
-        {
-            public void onClick(View view)
-            {
-                try
-                {
-                    lib.GetAccSensibility();
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         buttonConnect.setEnabled(false);
-        buttonRequest.setEnabled(false);
         buttonDisconnect.setEnabled(false);
-        buttonGetRTC.setEnabled(false);
-        buttonSetRTC.setEnabled(false);
-        buttonSetLabel.setEnabled(false);
         buttonGetDeviceId.setEnabled(false);
-        buttonGetAcc.setEnabled(false);
 
     }
 
@@ -436,21 +292,11 @@ public class BioLibTestActivity extends Activity {
     private void Reset()
     {
         try
-        {
-            textBAT.setText("BAT: - - %");
-            textPULSE.setText("PULSE: - - bpm");
-            textPUSH.setText("PUSH-BUTTON: - - - ");
-            textRTC.setText("RTC: - - - ");
+        {   textBAT.setText("BAT: - - %");
             textDataReceived.setText("RECEIVED: - - - ");
             textACC.setText("ACC:  X: - -  Y: - -  Z: - -");
-            textSDCARD.setText("SD CARD STATUS: - - ");
-            textECG.setText("Ecg stream: -- ");
-            textHR.setText("PEAK: --  BPMi: -- bpm  BPM: -- bpm  R-R: -- ms");
-            textBAT.setText("BAT: -- %");
-            textPULSE.setText("HR: -- bpm     Nb. Leads: -- ");
             textDeviceId.setText("Device Id: - - - - - - - - - -");
-            textRadioEvent.setText(".");
-            textTimeSpan.setText("SPAN: - - - ");
+
 
             SDCARD_STATE = 0;
             BATTERY_LEVEL = 0;
@@ -500,7 +346,6 @@ public class BioLibTestActivity extends Activity {
                     text.append("Bluetooth is now enabled \n");
                     text.append("Macaddress selected: " + address + " \n");
                     buttonConnect.setEnabled(true);
-                    buttonRequest.setEnabled(true);
                     break;
 
                 case BioLib.MESSAGE_BLUETOOTH_NOT_ENABLED:
@@ -525,13 +370,8 @@ public class BioLibTestActivity extends Activity {
                     isConn = true;
 
                     buttonConnect.setEnabled(false);
-                    buttonRequest.setEnabled(false);
                     buttonDisconnect.setEnabled(true);
-                    buttonGetRTC.setEnabled(true);
-                    buttonSetRTC.setEnabled(true);
-                    buttonSetLabel.setEnabled(true);
                     buttonGetDeviceId.setEnabled(true);
-                    buttonGetAcc.setEnabled(true);
 
                     break;
 
@@ -541,13 +381,8 @@ public class BioLibTestActivity extends Activity {
                     isConn = false;
 
                     buttonConnect.setEnabled(true);
-                    buttonRequest.setEnabled(true);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetRTC.setEnabled(false);
-                    buttonSetRTC.setEnabled(false);
-                    buttonSetLabel.setEnabled(false);
                     buttonGetDeviceId.setEnabled(false);
-                    buttonGetAcc.setEnabled(false);
 
                     break;
 
@@ -557,30 +392,14 @@ public class BioLibTestActivity extends Activity {
                     isConn = false;
 
                     buttonConnect.setEnabled(true);
-                    buttonRequest.setEnabled(true);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetRTC.setEnabled(false);
-                    buttonSetRTC.setEnabled(false);
-                    buttonSetLabel.setEnabled(false);
                     buttonGetDeviceId.setEnabled(false);
-                    buttonGetAcc.setEnabled(false);
 
-                    break;
-
-                case BioLib.MESSAGE_PUSH_BUTTON:
-                    DATETIME_PUSH_BUTTON = (Date)msg.obj;
-                    numOfPushButton = msg.arg1;
-                    textPUSH.setText("PUSH-BUTTON: [#" + numOfPushButton + "]" + DATETIME_PUSH_BUTTON.toString());
-                    break;
-
-                case BioLib.MESSAGE_RTC:
-                    DATETIME_RTC = (Date)msg.obj;
-                    textRTC.setText("RTC: " + DATETIME_RTC.toString());
                     break;
 
                 case BioLib.MESSAGE_TIMESPAN:
                     DATETIME_TIMESPAN = (Date)msg.obj;
-                    textTimeSpan.setText("SPAN: " + DATETIME_TIMESPAN.toString());
+                    //textTimeSpan.setText("SPAN: " + DATETIME_TIMESPAN.toString());
                     break;
 
                 case BioLib.MESSAGE_DATA_UPDATED:
@@ -588,30 +407,7 @@ public class BioLibTestActivity extends Activity {
                     BATTERY_LEVEL = out.battery;
                     textBAT.setText("BAT: " + BATTERY_LEVEL + " %");
                     PULSE = out.pulse;
-                    textPULSE.setText("HR: " + PULSE + " bpm     Nb. Leads: " + lib.GetNumberOfChannels());
-                    break;
-
-                case BioLib.MESSAGE_SDCARD_STATE:
-                    SDCARD_STATE = (int)msg.arg1;
-                    if (SDCARD_STATE == 1)
-                        textSDCARD.setText("SD CARD STATE: ON");
-                    else
-                        textSDCARD.setText("SD CARD STATE: OFF");
-                    break;
-
-                case BioLib.MESSAGE_RADIO_EVENT:
-                    textRadioEvent.setText("Radio-event: received ... ");
-
-                    typeRadioEvent = (byte)msg.arg1;
-                    infoRadioEvent = (byte[]) msg.obj;
-
-                    String str = "";
-                    try {
-                        str = new String(infoRadioEvent, "UTF8");
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                    textRadioEvent.setText("Radio-event: " + typeRadioEvent + "[" + str + "]");
+                    //textPULSE.setText("HR: " + PULSE + " bpm     Nb. Leads: " + lib.GetNumberOfChannels());
                     break;
 
                 case BioLib.MESSAGE_FIRMWARE_VERSION:
@@ -641,11 +437,6 @@ public class BioLibTestActivity extends Activity {
                     textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
                     break;
 
-                case BioLib.MESSAGE_PEAK_DETECTION:
-                    BioLib.QRS qrs = (BioLib.QRS)msg.obj;
-                    textHR.setText("PEAK: " + qrs.position + "  BPMi: " + qrs.bpmi + " bpm  BPM: " + qrs.bpm + " bpm  R-R: " + qrs.rr + " ms");
-                    break;
-
                 case BioLib.MESSAGE_ACC_UPDATED:
                     dataACC = (BioLib.DataACC)msg.obj;
 
@@ -673,7 +464,7 @@ public class BioLibTestActivity extends Activity {
                             textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                             Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                            Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
                             startActivity(intent);
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
@@ -683,46 +474,28 @@ public class BioLibTestActivity extends Activity {
                         textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                         Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                        Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
                         startActivity(intent);
                     }
 
-                        //not a fall
-                     else {
+                    //not a fall
+                    else {
                         // Reset the fall counter if the magnitude is below the threshold
                         fallCounter = 0;
                         //Log.d("YourTag", "Fall not detected");
                         textACCFall.setText("Magnitude: "+accelerationMagnitude);
-                        }
+                    }
 
-
-                    //textACCFall.setText("ACC:  Fall was detected! Magnitude: "+accelerationMagnitude+" FallCounter: "+fallCounter);
-                    // on below line we are adding data to our graph view.
-
-                    //Inside your real-time data update loop
-                    /*dataPointsX.add(new DataPoint(x, c));
-                    dataPointsY.add(new DataPoint(y, c));
-                    dataPointsZ.add(new DataPoint(z, c));
-
-                     */
                     dataPointsMag.add(new DataPoint(c, accelerationMagnitude));
 
                     // Limit the number of data points to display (e.g., keep the last N points)
                     int maxDataPoints = 200; // Adjust as needed
 
                     if (dataPointsX.size() > maxDataPoints) {
-                        /*dataPointsX.remove(0);
-                        dataPointsY.remove(0);
-                        dataPointsZ.remove(0);*/
                         dataPointsMag.remove(0);
                     }
 
                     // Update the series with the new data
-                    /*seriesX.resetData(dataPointsX.toArray(new DataPoint[0]));
-                    seriesY.resetData(dataPointsY.toArray(new DataPoint[0]));
-                    seriesZ.resetData(dataPointsZ.toArray(new DataPoint[0]));
-
-                     */
                     seriesMag.appendData( new DataPoint(c, accelerationMagnitude), true, maxDataPoints);
 
                     // Set the static label formatter for the X-axis to display time
@@ -734,28 +507,8 @@ public class BioLibTestActivity extends Activity {
                     graphView.getViewport().setMinY(0);
                     graphView.getViewport().setMaxY(200);
 
-                    /*graphView.addSeries(seriesX);
-                    graphView.addSeries(seriesY);
-                    graphView.addSeries(seriesZ);*/
                     graphView.addSeries(seriesMag);
 
-
-
-                    break;
-
-                case BioLib.MESSAGE_ECG_STREAM:
-                    try
-                    {
-                        textECG.setText("ECG received");
-                        ecg = (byte[][]) msg.obj;
-                        int nLeads = ecg.length;
-                        nBytes = ecg[0].length;
-                        textECG.setText("ECG stream: OK   nBytes: " + nBytes + "   nLeads: " + nLeads);
-                    }
-                    catch (Exception ex)
-                    {
-                        textECG.setText("ERROR in ecg stream");
-                    }
                     break;
 
                 case BioLib.MESSAGE_TOAST:
@@ -825,13 +578,8 @@ public class BioLibTestActivity extends Activity {
                     text.append("Bluetooth is now enabled \n");
 
                     buttonConnect.setEnabled(true);
-                    buttonRequest.setEnabled(true);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetRTC.setEnabled(false);
-                    buttonSetRTC.setEnabled(false);
-                    buttonSetLabel.setEnabled(false);
                     buttonGetDeviceId.setEnabled(false);
-                    buttonGetAcc.setEnabled(false);
 
                     text.append("Macaddress selected: " + address + " \n");
                 }
@@ -842,13 +590,8 @@ public class BioLibTestActivity extends Activity {
                     isConn = false;
 
                     buttonConnect.setEnabled(false);
-                    buttonRequest.setEnabled(false);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetRTC.setEnabled(false);
-                    buttonSetRTC.setEnabled(false);
-                    buttonSetLabel.setEnabled(false);
                     buttonGetDeviceId.setEnabled(false);
-                    buttonGetAcc.setEnabled(false);
                 }
                 break;
 

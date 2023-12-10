@@ -18,10 +18,10 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_search_device">SearchDeviceActivity</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="biolib">BioLib</string>
+    <string name="biolib_user">BioLib</string>
 
     <string name="title_activity_detect_fall">DetectFallActivity </string>
-    <string name="ACCdata">ACC Data</string>
+    <string name="biolib_developer">Developer</string>
 
 
 </resources>

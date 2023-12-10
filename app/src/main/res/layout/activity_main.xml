@@ -8,20 +8,19 @@
     android:gravity="center">
 
     <Button
-        android:id="@+id/ACCdata"
+        android:id="@+id/biolib_developer"
         android:layout_width="145dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/biolib"
+        android:layout_below="@+id/biolib_user"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="134dp"
         android:layout_marginTop="33dp"
         android:layout_marginEnd="131dp"
-        android:text="@string/ACCdata"
-        />
+        android:text="@string/biolib_developer" />
 
     <Button
-        android:id="@+id/biolib"
+        android:id="@+id/biolib_user"
         android:layout_width="144dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonSendMessage"
@@ -30,7 +29,7 @@
         android:layout_marginStart="134dp"
         android:layout_marginTop="38dp"
         android:layout_marginEnd="133dp"
-        android:text="@string/biolib" />
+        android:text="@string/biolib_user" />
 
     <TextView
         android:id="@+id/textView"
