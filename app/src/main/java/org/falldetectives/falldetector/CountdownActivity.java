@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class CountdownActivity extends AppCompatActivity {
-
+    //static final int RESULT_OK=3;
     static final int RESULT_SEND_FALL_ALERT = 2;
 
     @Override

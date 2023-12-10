@@ -23,18 +23,20 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     TextView personEmergencyContact;
     TextView personName;
-    private static final int COUNTDOWN_REQUEST_CODE = 1;
+    private static final int COUNTDOWN_REQUEST_CODE = 2;
+    private static final int REQUEST_OK = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
         Button buttonBioLib = findViewById(R.id.biolib_user);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
 
+        //button that simulates the fall
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
         personName=findViewById(R.id.textView13);
@@ -74,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             //personName.setText(String.valueOf((selectedUser.getName())));
 
 
-
         }
     }
 
@@ -96,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
                 sendFallAlert();
             }
+
         }
     }
-
     private void sendFallAlert() {
 
         EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
@@ -114,4 +115,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
+
 };

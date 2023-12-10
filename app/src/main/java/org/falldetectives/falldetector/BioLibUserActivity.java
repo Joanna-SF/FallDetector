@@ -9,10 +9,12 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,8 +52,8 @@ public class BioLibUserActivity extends Activity {
     private TextView textPULSE;
     private TextView textDeviceId;
 
-
-
+    private static final int COUNTDOWN_REQUEST_CODE = 2;
+    private static final int REQUEST_OK = 3;
 
     private Button buttonConnect;
     private Button buttonDisconnect;
@@ -439,7 +441,7 @@ public class BioLibUserActivity extends Activity {
                             Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
                             Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
-                            startActivity(intent);
+                            startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
                     }
@@ -448,8 +450,8 @@ public class BioLibUserActivity extends Activity {
                         textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                         Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
-                        startActivity(intent);
+                        Intent intent = new Intent(BioLibUserActivity.this.getApplicationContext(), CountdownActivity.class);
+                        startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
                     }
 
                     //not a fall
@@ -532,6 +534,7 @@ public class BioLibUserActivity extends Activity {
         switch (requestCode)
         {
             case BioLib.REQUEST_ENABLE_BT:
+                //Handle Bluetooth enable request result
                 if (resultCode == Activity.RESULT_OK)
                 {
                     Toast.makeText(getApplicationContext(), "Bluetooth is now enabled! ", Toast.LENGTH_SHORT).show();
@@ -556,6 +559,7 @@ public class BioLibUserActivity extends Activity {
                 break;
 
             case 0:
+                // Handle result from SearchDeviceActivity
                 switch (resultCode)
                 {
                     case SearchDeviceActivity.CHANGE_MACADDRESS:
@@ -576,9 +580,49 @@ public class BioLibUserActivity extends Activity {
                         break;
                 }
                 break;
+
+            case COUNTDOWN_REQUEST_CODE:
+                // Check the result code from CountdownActivity
+                Toast.makeText(getApplicationContext(), "Receives code from Countdown Activity", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "resultCode: "+resultCode+"requestCode: "+requestCode, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Has Fall Alert", Toast.LENGTH_SHORT).show();
+
+                    if (resultCode == RESULT_OK) {
+
+                        Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
+                    } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
+                        Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
+
+                        sendFallAlertBioLib();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
+
+                        sendFallAlertBioLib();
+                    }
+
+
+            }
+
         }
+    private void sendFallAlertBioLib() {
+        Toast.makeText(getApplicationContext(), "sendFallAlertBioLib()", Toast.LENGTH_SHORT).show();
+
+        EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
+        String phoneNumber = editTextPhoneNumber.getText().toString();
+        String message = getResources().getString(R.string.fall_message);
+
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+            Toast.makeText(getApplicationContext(), "Fall alert sent successfully", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Fall alert failed to send", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
     }
 
 
 
-}
+
