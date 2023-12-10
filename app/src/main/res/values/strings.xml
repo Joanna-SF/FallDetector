@@ -4,4 +4,6 @@
     <string name="phone_hint">+351 111111111</string>
     <string name="button_text">Simulate fall</string>
     <string name="fall_message">Fall Alert! Your loved one may need your help.</string>
+    <string name="welcome_message">Welcome, %1$s!</string>
+
 </resources>

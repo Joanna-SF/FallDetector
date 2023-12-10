@@ -5,37 +5,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
+    android:background="#3498db"
     android:gravity="center">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/emergency_contact"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="133dp"
+        android:layout_marginEnd="133dp"
+        android:text="@string/emergency_contact" />
 
     <EditText
         android:id="@+id/editTextPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="58dp"
+        android:layout_height="58dp"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="113dp"
+        android:layout_marginTop="13dp"
+        android:layout_marginEnd="117dp"
+        android:autofillHints="phoneNumber"
         android:ems="10"
-        android:minHeight="48dp"
         android:hint="@string/phone_hint"
         android:inputType="phone"
-        android:autofillHints="phoneNumber"/>
+        android:minHeight="48dp" />
 
     <Button
         android:id="@+id/buttonSendMessage"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editTextPhone"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="128dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="128dp"
+        android:text="@string/button_text" />
+
+    <TextView
+        android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_text"
+        android:layout_above="@+id/textView"
+        android:textColor="#800080"
+        android:textSize="20sp"
         android:layout_centerHorizontal="true"
-        android:layout_below="@+id/editTextPhone"
-        android:layout_marginTop="25dp"/>
-
-
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="180dp" />
 </RelativeLayout>
