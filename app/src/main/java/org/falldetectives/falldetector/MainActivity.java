@@ -6,10 +6,12 @@ import android.content.Intent;
 import android.content.Intent;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,10 +28,33 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
+        Button buttonBioLib = findViewById(R.id.biolib_user);
+
         personEmergencyContact = findViewById(R.id.editTextPhone);
+
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
         personName=findViewById(R.id.textView13);
+
+        buttonBioLibDeveloper.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        buttonBioLib.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                Intent intent = new Intent(MainActivity.this, BioLibUserActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         // Check for SMS permission
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
@@ -89,4 +114,4 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-}
+};
