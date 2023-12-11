@@ -2,7 +2,7 @@
     <string name="app_name">Fall Detector</string>
     <string name="emergency_contact">Emergency contact</string>
     <string name="phone_hint">+351 111111111</string>
-    <string name="button_text">Simulate fall</string>
+    <string name="button_text">Manual fall alert</string>
     <string name="fall_message">Fall Alert! Your loved one may need your help.</string>
 
     <string name="discover">Get Paired Devices</string>
