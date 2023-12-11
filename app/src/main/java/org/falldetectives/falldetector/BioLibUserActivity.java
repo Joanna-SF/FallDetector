@@ -57,8 +57,6 @@ public class BioLibUserActivity extends Activity {
     private TextView textPULSE;
     private TextView textDeviceId;
 
-    private static final int COUNTDOWN_REQUEST_CODE = 2;
-    private static final int REQUEST_OK = 3;
 
     private Button buttonConnect;
     private Button buttonDisconnect;
@@ -91,6 +89,11 @@ public class BioLibUserActivity extends Activity {
     private static final double FALL_THRESHOLD_2 = 200.0;  // Threshold for fall detection
 
     private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
+    private int COUNTDOWN_BUSY=0;
+    private static final int COUNTDOWN_REQUEST_CODE = 2;
+    private static final int REQUEST_OK = 3;
+    private double accelerationMagnitude;
+
     private LinkedList<Double> xValues = new LinkedList<>();
     private LinkedList<Double> yValues = new LinkedList<>();
     private LinkedList<Double> zValues = new LinkedList<>();
@@ -393,59 +396,58 @@ public class BioLibUserActivity extends Activity {
                 case BioLib.MESSAGE_ACC_UPDATED:
                     dataACC = (BioLib.DataACC) msg.obj;
 
-                    double x = dataACC.X;
-                    double y = dataACC.Y;
-                    double z = dataACC.Z;
-                    double c = System.currentTimeMillis();
+                    if (COUNTDOWN_BUSY==0) {
 
-                    if (accConf == "")
-                        textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
-                    else
-                        textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
+                        double x = dataACC.X;
+                        double y = dataACC.Y;
+                        double z = dataACC.Z;
+                        double c = System.currentTimeMillis();
 
-                    double accelerationMagnitude = processAccelerometerData(x, y, z);
-                    // Check if the magnitude indicates a fall
-                    textACCFall.setText("ACC Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+                        if (accConf == "")
+                            textACC.setText("ACC:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
+                        else
+                            textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
 
-                    //possible fall detected
-                    if (accelerationMagnitude > FALL_THRESHOLD_1) {
-                        fallCounter++;
+                        accelerationMagnitude = processAccelerometerData(x, y, z);
+                        // Check if the magnitude indicates a fall
+                        textACCFall.setText("ACC Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
 
-                        if (fallCounter >= FALL_CONFIRMATION_COUNT) {
+                        //possible fall detected
+                        if (accelerationMagnitude > FALL_THRESHOLD_1) {
+                            fallCounter++;
+
+                            if (fallCounter >= FALL_CONFIRMATION_COUNT) {
+                                // Fall detected
+                                fallDetected();
+
+                            }
+                        } else if (accelerationMagnitude > FALL_THRESHOLD_2) {
                             // Fall detected
-                            //Log.d("YourTag", "Fall detected");
-                            textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
-                            Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
-
-                            Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
-                            startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
+                            fallDetected();
 
                         }
-                    } else if (accelerationMagnitude > FALL_THRESHOLD_2) {
-                        textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
-                        Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(BioLibUserActivity.this.getApplicationContext(), CountdownActivity.class);
-                        startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
+                        //not a fall
+                        else {
+                            // Reset the fall counter if the magnitude is below the threshold
+                            fallCounter = 0;
+                            //Log.d("YourTag", "Fall not detected");
+                            textACCFall.setText("Magnitude: " + accelerationMagnitude);
+                        }
+
+                        dataPointsMag.add(new DataPoint(c, accelerationMagnitude));
+
+                        // Limit the number of data points to display (e.g., keep the last N points)
+                        int maxDataPoints = 200; // Adjust as needed
+
+                        if (dataPointsX.size() > maxDataPoints) {
+                            dataPointsMag.remove(0);
+                        }
                     }
-
-                    //not a fall
                     else {
-                        // Reset the fall counter if the magnitude is below the threshold
-                        fallCounter = 0;
-                        //Log.d("YourTag", "Fall not detected");
-                        textACCFall.setText("Magnitude: " + accelerationMagnitude);
+                        //Toast.makeText(getApplicationContext(), "Countdown occupied:"+COUNTDOWN_BUSY, Toast.LENGTH_SHORT).show();
+
                     }
-
-                    dataPointsMag.add(new DataPoint(c, accelerationMagnitude));
-
-                    // Limit the number of data points to display (e.g., keep the last N points)
-                    int maxDataPoints = 200; // Adjust as needed
-
-                    if (dataPointsX.size() > maxDataPoints) {
-                        dataPointsMag.remove(0);
-                    }
-
                     break;
 
                 case BioLib.MESSAGE_TOAST:
@@ -504,6 +506,7 @@ public class BioLibUserActivity extends Activity {
     }
 
 
+
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
             case BioLib.REQUEST_ENABLE_BT:
@@ -548,7 +551,7 @@ public class BioLibUserActivity extends Activity {
                 break;
 
             case COUNTDOWN_REQUEST_CODE:
-
+                COUNTDOWN_BUSY=0;
                 if (resultCode == CountdownActivity.RESULT_OK) {
 
                     Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
@@ -592,7 +595,17 @@ public class BioLibUserActivity extends Activity {
         }
 
     }
+
+    private void fallDetected() {
+        textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+        Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
+
+        COUNTDOWN_BUSY=1;
+        Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
+        startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
+    }
 }
+
 
 
 
