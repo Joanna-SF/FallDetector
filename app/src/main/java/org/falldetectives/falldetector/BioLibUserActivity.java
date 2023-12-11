@@ -554,13 +554,13 @@ public class BioLibUserActivity extends Activity {
                 COUNTDOWN_BUSY=0;
                 if (resultCode == CountdownActivity.RESULT_OK) {
 
-                    Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
-                    Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
                     sendFallAlertBioLib();
 
                 } else {
-                    Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
                     sendFallAlertBioLib();
 
 
@@ -581,7 +581,7 @@ public class BioLibUserActivity extends Activity {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-                Toast.makeText(getApplicationContext(), "Fall alert sent successfully", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Fall alert sent successfully", Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), "Fall alert failed to send", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
@@ -598,7 +598,7 @@ public class BioLibUserActivity extends Activity {
 
     private void fallDetected() {
         textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
-        Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
         COUNTDOWN_BUSY=1;
         Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
