@@ -1,5 +1,7 @@
 package org.falldetectives.falldetector;
 
+import static android.icu.text.ListFormatter.Type.AND;
+
 import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -356,14 +358,17 @@ public class BioLibUserActivity extends Activity {
 
                 case BioLib.MESSAGE_TIMESPAN:
                     DATETIME_TIMESPAN = (Date) msg.obj;
-                    //textTimeSpan.setText("SPAN: " + DATETIME_TIMESPAN.toString());
+                    //textTimeSpan.setText("SPAN: " + DATETIME_TIM
+                    // SPAN.toString());
                     break;
 
                 case BioLib.MESSAGE_DATA_UPDATED:
                     BioLib.Output out = (BioLib.Output) msg.obj;
                     BATTERY_LEVEL = out.battery;
 
-                    Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
+                    if (BATTERY_LEVEL < 20 && BATTERY_LEVEL>0 ) {
+                        Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
+                    }
 
                     textBAT.setText("BAT: " + BATTERY_LEVEL + " %");
                     PULSE = out.pulse;
