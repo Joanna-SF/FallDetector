@@ -46,6 +46,7 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void onImOkClicked(View view) {
         // The user clicked "I'm Ok" during countdown
+        //RESULT_OK=-1
         setResult(RESULT_OK);
         finish();
     }

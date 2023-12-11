@@ -23,18 +23,22 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     TextView personEmergencyContact;
     TextView personName;
-    private static final int COUNTDOWN_REQUEST_CODE = 1;
+    //public String phoneNumber;
+    private static final int COUNTDOWN_REQUEST_CODE = 2;
+    private static final int REQUEST_OK = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
         Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
         Button buttonBioLib = findViewById(R.id.biolib_user);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
+        //phoneNumber= personEmergencyContact.getText().toString();
 
+        //button that simulates the fall
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
         personName=findViewById(R.id.textView13);
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
+                String phoneNumber=personEmergencyContact.getText().toString();
+                //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
+                intent.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intent);
             }
         });
@@ -51,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, BioLibUserActivity.class);
+                String phoneNumber=personEmergencyContact.getText().toString();
+                //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
+                intent.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intent);
             }
         });
@@ -74,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
             //personName.setText(String.valueOf((selectedUser.getName())));
 
 
-
         }
     }
 
@@ -87,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == COUNTDOWN_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-
                 Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
+
             } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
 
                 sendFallAlert();
@@ -96,22 +105,31 @@ public class MainActivity extends AppCompatActivity {
 
                 sendFallAlert();
             }
+
         }
     }
-
-    private void sendFallAlert() {
+    public void sendFallAlert() {
 
         EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
         String phoneNumber = editTextPhoneNumber.getText().toString();
         String message = getResources().getString(R.string.fall_message);
 
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(phoneNumber, null, message, null, null);
-            Toast.makeText(getApplicationContext(), "Fall alert sent successfully", Toast.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Fall alert failed to send", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
+        if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
+                == PackageManager.PERMISSION_GRANTED) {
+            try {
+                SmsManager smsManager = SmsManager.getDefault();
+                smsManager.sendTextMessage(phoneNumber, null, message, null, null);
+                Toast.makeText(getApplicationContext(), "Fall alert sent successfully", Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), "Fall alert failed to send", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        } else {
+            // Handle the case where SMS permission is not granted
+            ActivityCompat.requestPermissions(MainActivity.this,
+                    new String[]{Manifest.permission.SEND_SMS}, 1);
         }
     }
+
+
 };
