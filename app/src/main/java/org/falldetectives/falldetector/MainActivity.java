@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
-        Button buttonBioLib = findViewById(R.id.biolib_user);
+        Button buttonBioLibUser = findViewById(R.id.biolib_user);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
         //phoneNumber= personEmergencyContact.getText().toString();
@@ -54,14 +54,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonBioLib.setOnClickListener(new View.OnClickListener() {
+        buttonBioLibUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Intent intent = new Intent(MainActivity.this, BioLibUserActivity.class);
+                Intent intentBioLibUser = new Intent(MainActivity.this, BioLibUserActivity.class);
                 String phoneNumber=personEmergencyContact.getText().toString();
                 //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
-                intent.putExtra("PHONE_NUMBER", phoneNumber);
-                startActivity(intent);
+                intentBioLibUser.putExtra("PHONE_NUMBER", phoneNumber);
+                startActivity(intentBioLibUser);
             }
         });
 
@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             UserModel selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
 
             personEmergencyContact.setText(String.valueOf(selectedUser.getEmergency_contact()));
-            String welcomeMessage = "Welcome, " + selectedUser.getName() + " !";
+            String welcomeMessage = "Welcome, " + selectedUser.getName() + "!";
             personName.setText(welcomeMessage);
 
             //personName.setText(String.valueOf((selectedUser.getName())));

@@ -362,6 +362,9 @@ public class BioLibUserActivity extends Activity {
                 case BioLib.MESSAGE_DATA_UPDATED:
                     BioLib.Output out = (BioLib.Output) msg.obj;
                     BATTERY_LEVEL = out.battery;
+
+                    Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
+
                     textBAT.setText("BAT: " + BATTERY_LEVEL + " %");
                     PULSE = out.pulse;
                     //textPULSE.setText("HR: " + PULSE + " bpm     Nb. Leads: " + lib.GetNumberOfChannels());
