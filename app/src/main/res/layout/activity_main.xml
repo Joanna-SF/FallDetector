@@ -46,33 +46,30 @@
 
     <Button
         android:id="@+id/buttonSendMessage"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPhone"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="134dp"
         android:layout_marginEnd="133dp"
         android:layout_marginTop="33dp"
         android:text="@string/button_text" />
 
     <Button
         android:id="@+id/biolib_user"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/buttonSendMessage"
-        android:layout_marginStart="134dp"
         android:layout_marginTop="33dp"
         android:layout_marginEnd="133dp"
         android:text="@string/biolib_user" />
 
     <Button
         android:id="@+id/biolib_developer"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/biolib_user"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="134dp"
         android:layout_marginTop="33dp"
         android:layout_marginEnd="126dp"
         android:text="@string/biolib_developer" />
