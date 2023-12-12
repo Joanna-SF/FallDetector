@@ -12,7 +12,6 @@
         android:id="@+id/textView13"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/textView"
         android:textColor="#800080"
         android:textSize="20sp"
         android:layout_centerHorizontal="true"
@@ -23,9 +22,8 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textView13"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="133dp"
-        android:layout_marginEnd="133dp"
         android:text="@string/emergency_contact" />
 
 
@@ -35,9 +33,7 @@
         android:layout_height="58dp"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="54dp"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="63dp"
         android:autofillHints="phoneNumber"
         android:ems="10"
         android:hint="@string/phone_hint"
@@ -46,35 +42,29 @@
 
     <Button
         android:id="@+id/buttonSendMessage"
-        android:layout_width="160dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/editTextPhone"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="134dp"
-        android:layout_marginEnd="133dp"
         android:layout_marginTop="33dp"
         android:text="@string/button_text" />
 
     <Button
         android:id="@+id/biolib_user"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/buttonSendMessage"
-        android:layout_marginStart="134dp"
         android:layout_marginTop="33dp"
-        android:layout_marginEnd="133dp"
         android:text="@string/biolib_user" />
 
     <Button
         android:id="@+id/biolib_developer"
-        android:layout_width="160dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/biolib_user"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="134dp"
         android:layout_marginTop="33dp"
-        android:layout_marginEnd="126dp"
         android:text="@string/biolib_developer" />
 
 
