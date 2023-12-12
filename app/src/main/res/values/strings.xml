@@ -2,7 +2,7 @@
     <string name="app_name">Fall Detector</string>
     <string name="emergency_contact">Emergency contact</string>
     <string name="phone_hint">+351 111111111</string>
-    <string name="button_text">Manual fall alert</string>
+    <string name="button_text">Manual Fall Alert</string>
     <string name="fall_message">Fall Alert! Your loved one may need your help.</string>
 
     <string name="discover">Get Paired Devices</string>
@@ -18,7 +18,7 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_search_device">SearchDeviceActivity</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="biolib_user">BioLib</string>
+    <string name="biolib_user">Bluetooth Settings</string>
 
     <string name="title_activity_detect_fall">DetectFallActivity </string>
     <string name="biolib_developer">Developer</string>
