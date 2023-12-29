@@ -17,12 +17,10 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.ProgressBar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import com.jjoe64.graphview.series.DataPoint;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -32,49 +30,30 @@ import Bio.Library.namespace.BioLib;
 
 
 public class BioLibUserActivity extends Activity {
-    // creating a variable
-    // for our graph view.
-    private BioLib lib = null;
-    private String address = "";
-    private String macaddress = "";
-    private String mConnectedDeviceName = "";
-    private BluetoothDevice deviceToConnect;
-
-    public static final String DEVICE_NAME = "device_name";
-    public static final String TOAST = "toast";
-
     private TextView text;
     private TextView textACC;
     private TextView textDataReceived;
     private TextView textBAT;
     private TextView textTimeSpan;
-    private TextView textPULSE;
-    private TextView textDeviceId;
-
-
     private Button buttonConnect;
     private Button buttonDisconnect;
-    private Button buttonSearch;
-    private Button buttonGetDeviceId;
-    private Button buttonGetAcc;
+    private ProgressBar batteryProgressBar;
 
+
+    public static final String DEVICE_NAME = "device_name";
+    public static final String TOAST = "toast";
+    private BioLib lib = null;
+    private String address = "";
+    private String macaddress = "";
+    private String mConnectedDeviceName = "";
+    private BluetoothDevice deviceToConnect;
     private int BATTERY_LEVEL = 0;
-    private int PULSE = 0;
-    private Date DATETIME_PUSH_BUTTON = null;
-    private Date DATETIME_RTC = null;
+    private int BATTERY_LEVEL1=0;
     private Date DATETIME_TIMESPAN = null;
-    private int SDCARD_STATE = 0;
-    private int numOfPushButton = 0;
     private BioLib.DataACC dataACC = null;
-    private String deviceId = "";
     private String firmwareVersion = "";
     private byte accSensibility = 1;    // NOTE: 2G= 0, 4G= 1
-    private byte typeRadioEvent = 0;
-    private byte[] infoRadioEvent = null;
-    private short countEvent = 0;
     private boolean isConn = false;
-    private byte[][] ecg = null;
-    private int nBytes = 0;
     private String accConf = "";
     public static TextView textACCFall;
 
@@ -85,7 +64,6 @@ public class BioLibUserActivity extends Activity {
     private static final int FALL_CONFIRMATION_COUNT = 2;  // Number of consecutive readings to confirm a fall
     private int COUNTDOWN_BUSY=0;
     private static final int COUNTDOWN_REQUEST_CODE = 2;
-    private static final int REQUEST_OK = 3;
     private double accelerationMagnitude;
 
     private LinkedList<Double> xValues = new LinkedList<>();
@@ -93,8 +71,6 @@ public class BioLibUserActivity extends Activity {
     private LinkedList<Double> zValues = new LinkedList<>();
 
     private List<DataPoint> dataPointsX = new ArrayList<>();
-    private List<DataPoint> dataPointsY = new ArrayList<>();
-    private List<DataPoint> dataPointsZ = new ArrayList<>();
     private List<DataPoint> dataPointsMag = new ArrayList<>();
 
     String phoneNumber;
@@ -121,22 +97,34 @@ public class BioLibUserActivity extends Activity {
 
         // ###################################################
         // MACADDRESS:
-        address = "00:23:FE:00:0B:59";
+        address = "00:23:FE:00:0B:23";
         // ###################################################
+
         text = (TextView) findViewById(R.id.lblStatus);
         textBAT = (TextView) findViewById(R.id.lblBAT);
         text.setText("");
         textACCFall = findViewById(R.id.ACC_fall);
         textACC = (TextView) findViewById(R.id.lblACC);
+        buttonConnect = (Button) findViewById(R.id.buttonConnect);
+        buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
+        batteryProgressBar = findViewById(R.id.batteryProgressBar);
+        buttonConnect.setEnabled(false);
+        buttonDisconnect.setEnabled(false);
 
+        if (lib == null) {
+            Toast.makeText(getApplicationContext(), "lib is null ", Toast.LENGTH_SHORT).show();
 
-        try {
-            lib = new BioLib(this, mHandler);
-            text.append("Init BioLib \n");
-        } catch (Exception e) {
-            text.append("Error to init BioLib \n");
-            e.printStackTrace();
+            try { //lib- new instance of BioLib class, "this" used because the BioLibUserActivity has the mHandler class
+                lib = new BioLib(this, mHandler);
+                text.append("Init BioLib \n");
+            } catch (Exception e) {
+                text.append("Error to init BioLib \n");
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), "lib not null ", Toast.LENGTH_SHORT).show();
         }
+
 
         // Retrieve the phone number from the Intent
         Intent intent = getIntent();
@@ -144,7 +132,6 @@ public class BioLibUserActivity extends Activity {
             phoneNumber = intent.getStringExtra("PHONE_NUMBER");
         }
 
-        buttonConnect = (Button) findViewById(R.id.buttonConnect);
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Connect();
@@ -153,10 +140,7 @@ public class BioLibUserActivity extends Activity {
             /*** Connect to device.*/
             private void Connect() {
                 try {
-
-
-
-                    address = "00:23:FE:00:0B:59";
+                    address = "00:23:FE:00:0B:23";
                     deviceToConnect = lib.mBluetoothAdapter.getRemoteDevice(address);
                     Reset();
                     text.setText("");
@@ -170,36 +154,14 @@ public class BioLibUserActivity extends Activity {
         });
 
         /*** Disconnect to device.*/
-        buttonDisconnect = (Button) findViewById(R.id.buttonDisconnect);
         buttonDisconnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Disconnect();
             }
         });
 
-
-        /*buttonSearch = (Button) findViewById(R.id.buttonSearch);
-        buttonSearch.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                Search(view);
-            }
-
-            *//*
-             * Search for bluetooth devices.
-             *//*
-            private void Search(View view) {
-                try {
-                    Intent myIntent = new Intent(view.getContext(), SearchDeviceActivity.class);
-                    startActivityForResult(myIntent, 0);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        });*/
-
-        buttonConnect.setEnabled(false);
-        buttonDisconnect.setEnabled(false);
     }
+
 
     public void OnDestroy() {
         if (isConn) {
@@ -213,10 +175,8 @@ public class BioLibUserActivity extends Activity {
         if (lib.mBluetoothAdapter != null) {
             lib.mBluetoothAdapter.cancelDiscovery();
         }
-
         lib = null;
     }
-
 
     /***
      * Disconnect from device.
@@ -237,19 +197,10 @@ public class BioLibUserActivity extends Activity {
     private void Reset() {
         try {
             textBAT.setText("BAT: - - %");
-            //textDataReceived.setText("RECEIVED: - - - ");
             textACC.setText("ACC:  X: - -  Y: - -  Z: - -");
-            //textDeviceId.setText("Device Id: - - - - - - - - - -");
 
-
-            SDCARD_STATE = 0;
             BATTERY_LEVEL = 0;
-            PULSE = 0;
-            DATETIME_PUSH_BUTTON = null;
-            DATETIME_RTC = null;
             DATETIME_TIMESPAN = null;
-            numOfPushButton = 0;
-            countEvent = 0;
             accConf = "";
             firmwareVersion = "";
         } catch (Exception ex) {
@@ -264,9 +215,6 @@ public class BioLibUserActivity extends Activity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case BioLib.MESSAGE_READ:
-                    textDataReceived.setText("RECEIVED: " + msg.arg1);
-                    break;
 
                 case BioLib.MESSAGE_DEVICE_NAME:
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
@@ -283,13 +231,17 @@ public class BioLibUserActivity extends Activity {
                 case BioLib.MESSAGE_BLUETOOTH_ENABLED:
                     Toast.makeText(getApplicationContext(), "Bluetooth is now enabled! ", Toast.LENGTH_SHORT).show();
                     text.append("Bluetooth is now enabled \n");
-                    text.append("Macaddress selected: " + address + " \n");
                     buttonConnect.setEnabled(true);
+                    buttonDisconnect.setEnabled(false);
+                    //text.append("Macaddress selected: " + address + " \n");
                     break;
 
                 case BioLib.MESSAGE_BLUETOOTH_NOT_ENABLED:
                     Toast.makeText(getApplicationContext(), "Bluetooth not enabled! ", Toast.LENGTH_SHORT).show();
                     text.append("Bluetooth not enabled \n");
+                    buttonConnect.setEnabled(true);
+                    //buttonConnect.setEnabled(false);
+                    //buttonDisconnect.setEnabled(false);
                     isConn = false;
                     break;
 
@@ -345,19 +297,18 @@ public class BioLibUserActivity extends Activity {
                     if (BATTERY_LEVEL < 20 && BATTERY_LEVEL>0 ) {
                         Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
                     }
-
                     textBAT.setText("BAT: " + BATTERY_LEVEL + " %");
-                    PULSE = out.pulse;
+
+                    if(BATTERY_LEVEL1!=BATTERY_LEVEL) {
+                        batteryProgressBar.setProgress(BATTERY_LEVEL);
+                    }
+
+                    BATTERY_LEVEL1=BATTERY_LEVEL;
                     break;
 
                 case BioLib.MESSAGE_FIRMWARE_VERSION:
                     // Show firmware version in device VitalJacket ...
                     firmwareVersion = (String) msg.obj;
-                    break;
-
-                case BioLib.MESSAGE_DEVICE_ID:
-                    deviceId = (String) msg.obj;
-                    //textDeviceId.setText("Device Id: " + deviceId);
                     break;
 
                 case BioLib.MESSAGE_ACC_SENSIBILITY:
@@ -427,10 +378,7 @@ public class BioLibUserActivity extends Activity {
                             dataPointsMag.remove(0);
                         }
                     }
-                    else {
-                        //Toast.makeText(getApplicationContext(), "Countdown occupied:"+COUNTDOWN_BUSY, Toast.LENGTH_SHORT).show();
 
-                    }
                     break;
 
                 case BioLib.MESSAGE_TOAST:
@@ -500,7 +448,6 @@ public class BioLibUserActivity extends Activity {
 
                     buttonConnect.setEnabled(true);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetDeviceId.setEnabled(false);
 
                     text.append("Macaddress selected: " + address + " \n");
                 } else {
@@ -510,11 +457,10 @@ public class BioLibUserActivity extends Activity {
 
                     buttonConnect.setEnabled(false);
                     buttonDisconnect.setEnabled(false);
-                    buttonGetDeviceId.setEnabled(false);
                 }
                 break;
 
-            case 0:
+            /*case 0:
                 // Handle result from SearchDeviceActivity
                 switch (resultCode) {
                     case SearchDeviceActivity.CHANGE_MACADDRESS:
@@ -531,13 +477,12 @@ public class BioLibUserActivity extends Activity {
                         }
                         break;
                 }
-                break;
+                break;*/
 
             case COUNTDOWN_REQUEST_CODE:
                 COUNTDOWN_BUSY=0;
                 if (resultCode == CountdownActivity.RESULT_OK) {
 
-                    //Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
                 } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
                     //Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
                     sendFallAlertBioLib();
@@ -546,12 +491,9 @@ public class BioLibUserActivity extends Activity {
                     //Toast.makeText(getApplicationContext(), "Fall Alert", Toast.LENGTH_SHORT).show();
                     sendFallAlertBioLib();
 
-
                 }
 
-
         }
-
     }
 
     private void sendFallAlertBioLib() {
@@ -580,7 +522,7 @@ public class BioLibUserActivity extends Activity {
     }
 
     private void fallDetected() {
-        textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+        //textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
         //Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
         COUNTDOWN_BUSY=1;

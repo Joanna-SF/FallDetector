@@ -34,13 +34,14 @@ public class SearchDeviceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (mBluetoothAdapter != null)
+            //if null, Bluetooth is not supported on the device or there is an issue with Bluetooth initialization.
         {
             if (mBluetoothAdapter.isEnabled())
+            //checks whether Bluetooth is currently enabled on the device
             {
-                selectedValue="00:23:FE:00:0B:59";
+                selectedValue="00:23:FE:00:0B:23";
                 Intent intent = new Intent();
                 intent.putExtra(SELECT_DEVICE_ADDRESS, selectedValue);
 
