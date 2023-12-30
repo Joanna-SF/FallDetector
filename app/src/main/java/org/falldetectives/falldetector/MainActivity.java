@@ -32,8 +32,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
-        Button buttonBioLibUser = findViewById(R.id.biolib_user);
+        Button buttonSettings = findViewById(R.id.btSettings);
+        Button buttonBluetoothSettings = findViewById(R.id.btBluetoothSettings);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
 
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         buttonSendMessage.setOnClickListener(this::sendMessage);
         personName=findViewById(R.id.textView13);
 
-        buttonBioLibDeveloper.setOnClickListener(new View.OnClickListener() {
+        buttonSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
                 Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        buttonBioLibUser.setOnClickListener(new View.OnClickListener() {
+        buttonBluetoothSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Intent intentBioLibUser = new Intent(MainActivity.this, BioLibUserActivity.class);
+                Intent intentBioLibUser = new Intent(MainActivity.this, BluetoothSettingsActivity.class);
                 String phoneNumber=personEmergencyContact.getText().toString();
                 //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
                 intentBioLibUser.putExtra("PHONE_NUMBER", phoneNumber);

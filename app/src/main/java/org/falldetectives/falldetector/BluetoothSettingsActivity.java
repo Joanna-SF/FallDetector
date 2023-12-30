@@ -30,7 +30,7 @@ import java.util.List;
 import Bio.Library.namespace.BioLib;
 
 
-public class BioLibUserActivity extends Activity {
+public class BluetoothSettingsActivity extends Activity {
     private TextView text;
     private TextView textACC;
     private TextView textDataReceived;
@@ -499,7 +499,7 @@ public class BioLibUserActivity extends Activity {
 
         String message = getResources().getString(R.string.fall_message);
 
-        if (ContextCompat.checkSelfPermission(BioLibUserActivity.this, Manifest.permission.SEND_SMS)
+        if (ContextCompat.checkSelfPermission(BluetoothSettingsActivity.this, Manifest.permission.SEND_SMS)
                 == PackageManager.PERMISSION_GRANTED) {
 
             try {
@@ -514,7 +514,7 @@ public class BioLibUserActivity extends Activity {
         } else {
 
             // Handle the case where SMS permission is not granted
-            ActivityCompat.requestPermissions(BioLibUserActivity.this,
+            ActivityCompat.requestPermissions(BluetoothSettingsActivity.this,
                     new String[]{Manifest.permission.SEND_SMS}, 1);
         }
 
@@ -525,7 +525,7 @@ public class BioLibUserActivity extends Activity {
         //Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
         COUNTDOWN_BUSY=1;
-        Intent intent = new Intent(BioLibUserActivity.this, CountdownActivity.class);
+        Intent intent = new Intent(BluetoothSettingsActivity.this, CountdownActivity.class);
         startActivityForResult(intent, COUNTDOWN_REQUEST_CODE);
     }
 }
