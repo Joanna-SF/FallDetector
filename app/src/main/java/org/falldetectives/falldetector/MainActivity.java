@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity {
         Button buttonBioLibUser = findViewById(R.id.biolib_user);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
-        //phoneNumber= personEmergencyContact.getText().toString();
 
         //button that simulates the fall
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
@@ -46,9 +45,8 @@ public class MainActivity extends AppCompatActivity {
         buttonBioLibDeveloper.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
-                Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
+                Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
                 String phoneNumber=personEmergencyContact.getText().toString();
-                //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
                 intent.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intent);
             }

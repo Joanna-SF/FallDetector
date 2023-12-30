@@ -66,6 +66,9 @@
         </activity>
 
 
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".FallHistoryActivity" />
 
         <activity android:name=".NewUserActivity" />
         <activity android:name=".RegisteredUserActivity" />

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ProgressBar;
@@ -110,20 +111,10 @@ public class BioLibUserActivity extends Activity {
         batteryProgressBar = findViewById(R.id.batteryProgressBar);
         buttonConnect.setEnabled(false);
         buttonDisconnect.setEnabled(false);
+        ImageView returnArrow = findViewById(R.id.iconRightArrow_btsettings);
 
-        if (lib == null) {
-            Toast.makeText(getApplicationContext(), "lib is null ", Toast.LENGTH_SHORT).show();
 
-            try { //lib- new instance of BioLib class, "this" used because the BioLibUserActivity has the mHandler class
-                lib = new BioLib(this, mHandler);
-                text.append("Init BioLib \n");
-            } catch (Exception e) {
-                text.append("Error to init BioLib \n");
-                e.printStackTrace();
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "lib not null ", Toast.LENGTH_SHORT).show();
-        }
+        lib = BioLibInstance.getInstance(this, mHandler, text);
 
 
         // Retrieve the phone number from the Intent
@@ -131,6 +122,13 @@ public class BioLibUserActivity extends Activity {
         if (intent != null && intent.hasExtra("PHONE_NUMBER")) {
             phoneNumber = intent.getStringExtra("PHONE_NUMBER");
         }
+
+        returnArrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         buttonConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
@@ -328,6 +326,8 @@ public class BioLibUserActivity extends Activity {
                     break;
 
                 case BioLib.MESSAGE_ACC_UPDATED:
+                    buttonDisconnect.setEnabled(true);
+
                     dataACC = (BioLib.DataACC) msg.obj;
 
                     if (COUNTDOWN_BUSY==0) {
@@ -365,7 +365,6 @@ public class BioLibUserActivity extends Activity {
                         else {
                             // Reset the fall counter if the magnitude is below the threshold
                             fallCounter = 0;
-                            //Log.d("YourTag", "Fall not detected");
                             textACCFall.setText("Magnitude: " + accelerationMagnitude);
                         }
 
