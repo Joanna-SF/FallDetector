@@ -113,9 +113,7 @@ public class BluetoothSettingsActivity extends Activity {
         buttonDisconnect.setEnabled(false);
         ImageView returnArrow = findViewById(R.id.iconRightArrow_btsettings);
 
-
         lib = BioLibInstance.getInstance(this, mHandler, text);
-
 
         // Retrieve the phone number from the Intent
         Intent intent = getIntent();
@@ -159,6 +157,20 @@ public class BluetoothSettingsActivity extends Activity {
         });
 
     }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Perform tasks to be resumed or restarted here
+        Toast.makeText(getApplicationContext(), "onResume", Toast.LENGTH_SHORT).show();
+
+        lib = BioLibInstance.getInstance(this, mHandler, text);
+
+        buttonConnect.setEnabled(false);
+        buttonDisconnect.setEnabled(true);
+    }
+
 
 
     public void OnDestroy() {
@@ -289,11 +301,12 @@ public class BluetoothSettingsActivity extends Activity {
                     break;
 
                 case BioLib.MESSAGE_DATA_UPDATED:
+
                     BioLib.Output out = (BioLib.Output) msg.obj;
                     BATTERY_LEVEL = out.battery;
 
                     if (BATTERY_LEVEL < 20 && BATTERY_LEVEL>0 ) {
-                        Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(getApplicationContext(), "Warning: Battery level low", Toast.LENGTH_SHORT).show();
                     }
                     textBAT.setText("BAT: " + BATTERY_LEVEL + " %");
 
@@ -310,6 +323,7 @@ public class BluetoothSettingsActivity extends Activity {
                     break;
 
                 case BioLib.MESSAGE_ACC_SENSIBILITY:
+                    Toast.makeText(getApplicationContext(), "MESSAGE_ACC_SENSIBILITY" + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     accSensibility = (byte) msg.arg1;
                     accConf = "4G";
                     switch (accSensibility) {
@@ -321,14 +335,15 @@ public class BluetoothSettingsActivity extends Activity {
                             accConf = "4G";
                             break;
                     }
-
-                    textACC.setText("ACC [" + accConf + "]:  X: " + dataACC.X + "  Y: " + dataACC.Y + "  Z: " + dataACC.Z);
                     break;
 
                 case BioLib.MESSAGE_ACC_UPDATED:
+
                     buttonDisconnect.setEnabled(true);
 
                     dataACC = (BioLib.DataACC) msg.obj;
+                    //Toast.makeText(getApplicationContext(), "MESSAGE_ACC_UPDATED:  X:  "+dataACC.X+"  Y: "+dataACC.Y+"  Z: "+dataACC.Z,  Toast.LENGTH_SHORT).show();
+
 
                     if (COUNTDOWN_BUSY==0) {
 
@@ -345,6 +360,8 @@ public class BluetoothSettingsActivity extends Activity {
                         accelerationMagnitude = processAccelerometerData(x, y, z);
                         // Check if the magnitude indicates a fall
                         textACCFall.setText("ACC Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
+                        Toast.makeText(getApplicationContext(), "ACC Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter,  Toast.LENGTH_SHORT).show();
+
 
                         //possible fall detected
                         if (accelerationMagnitude > FALL_THRESHOLD_1) {
@@ -353,11 +370,14 @@ public class BluetoothSettingsActivity extends Activity {
                             if (fallCounter >= FALL_CONFIRMATION_COUNT) {
                                 // Fall detected
                                 fallDetected();
+                                Toast.makeText(getApplicationContext(), "Fall detected, Magnitude:"+accelerationMagnitude,  Toast.LENGTH_SHORT).show();
+
 
                             }
                         } else if (accelerationMagnitude > FALL_THRESHOLD_2) {
                             // Fall detected
                             fallDetected();
+                            Toast.makeText(getApplicationContext(), "Fall detected, Magnitude:"+accelerationMagnitude,  Toast.LENGTH_SHORT).show();
 
                         }
 
@@ -381,6 +401,7 @@ public class BluetoothSettingsActivity extends Activity {
                     break;
 
                 case BioLib.MESSAGE_TOAST:
+                    Toast.makeText(getApplicationContext(), "MESSAGE_TOAST " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST), Toast.LENGTH_SHORT).show();
 
                     break;
@@ -434,8 +455,6 @@ public class BluetoothSettingsActivity extends Activity {
 
         return Math.sqrt(x * x + y * y + z * z - 32 * 32);
     }
-
-
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
