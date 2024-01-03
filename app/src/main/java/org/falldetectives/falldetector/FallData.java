@@ -26,4 +26,8 @@ public class FallData {
         Date date = new Date(timestamp);
         return sdf.format(date);
     }
+
+    public String getFalseAlarmStatus() {
+        return isFalseAlarm ? "False alarm" : "Real fall";
+    }
 }

@@ -56,19 +56,19 @@ public class CountdownActivity extends AppCompatActivity {
     }
 
     private void onImOkClicked(View view) {
-        addFallData(false);
+        addFallData(true);
         setResult(RESULT_OK);
         finish();
     }
 
     private void onSendFallAlertClicked(View view) {
-        addFallData(true);
+        addFallData(false);
         setResult(RESULT_SEND_FALL_ALERT);
         finish();
     }
 
     private void sendFallAlert() {
-        addFallData(true);
+        addFallData(false);
         setResult(RESULT_SEND_FALL_ALERT);
         finish();
     }
