@@ -1,5 +1,9 @@
 package org.falldetectives.falldetector;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 public class FallData {
     private long timestamp;
     private boolean isFalseAlarm;
@@ -15,5 +19,11 @@ public class FallData {
 
     public boolean isFalseAlarm() {
         return isFalseAlarm;
+    }
+
+    public String getFormattedTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date(timestamp);
+        return sdf.format(date);
     }
 }

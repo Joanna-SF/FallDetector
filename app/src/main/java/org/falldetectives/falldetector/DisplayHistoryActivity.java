@@ -56,7 +56,7 @@ public class DisplayHistoryActivity extends AppCompatActivity {
         List<String> dataStrings = new ArrayList<>();
 
         for (FallData fallData : fallDataList) {
-            String dataString = "Timestamp: " + fallData.getTimestamp() + ", IsFalseAlarm: " + fallData.isFalseAlarm();
+            String dataString = "Timestamp: " + fallData.getFormattedTimestamp() + ", IsFalseAlarm: " + fallData.isFalseAlarm();
             dataStrings.add(dataString);
         }
 
