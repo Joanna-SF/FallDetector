@@ -61,7 +61,7 @@ public class CountdownActivity extends AppCompatActivity {
         setResult(RESULT_SEND_FALL_ALERT);
         finish();
     }
-    // In CountdownActivity.java
+
     public static Intent newIntent(Context context) {
         return new Intent(context, CountdownActivity.class);
     }
