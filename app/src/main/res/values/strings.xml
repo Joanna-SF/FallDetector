@@ -18,11 +18,12 @@
     <string name="menu_settings">Settings</string>
     <string name="title_activity_search_device">SearchDeviceActivity</string>
     <string name="bluetooth">Bluetooth</string>
-    <string name="biolib_user">Bluetooth Settings</string>
+    <string name="btBluetoothSettings">Bluetooth Settings</string>
 
     <string name="title_activity_detect_fall">DetectFallActivity </string>
-    <string name="biolib_developer">Developer</string>
+    <string name="btSettings">User Settings</string>
     <string name="fall_history">Fall History</string>
+
 
     <string name="welcome_message">Welcome, %1$s!</string>
 

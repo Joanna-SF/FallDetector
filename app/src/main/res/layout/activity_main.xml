@@ -50,22 +50,22 @@
         android:text="@string/button_text" />
 
     <Button
-        android:id="@+id/biolib_user"
+        android:id="@+id/btBluetoothSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/buttonSendMessage"
         android:layout_marginTop="33dp"
-        android:text="@string/biolib_user" />
+        android:text="@string/btBluetoothSettings" />
 
     <Button
-        android:id="@+id/biolib_developer"
+        android:id="@+id/btSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/biolib_user"
+        android:layout_below="@+id/btBluetoothSettings"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
-        android:text="@string/biolib_developer" />
+        android:text="@string/btSettings" />
 
     <Button
         android:id="@+id/fall_history"

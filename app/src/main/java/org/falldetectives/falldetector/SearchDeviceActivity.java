@@ -19,7 +19,7 @@ public class SearchDeviceActivity extends Activity {
     public static final int CHANGE_MACADDRESS = 100;
     private ListView mainListView ;
     private ArrayAdapter<String> listAdapter;
-    private String selectedValue = "";
+    private String selectedValue = ""; //selected Bluetooth device's address
     private BluetoothAdapter mBluetoothAdapter = null;
     private Button buttonOK;
 
@@ -34,11 +34,14 @@ public class SearchDeviceActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.search);
 
-        buttonOK = (Button) findViewById(R.id.cmdOk);
-        buttonOK.setOnClickListener(new View.OnClickListener()
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (mBluetoothAdapter != null)
+            //if null, Bluetooth is not supported on the device or there is an issue with Bluetooth initialization.
         {
-            public void onClick(View view)
+            if (mBluetoothAdapter.isEnabled())
+            //checks whether Bluetooth is currently enabled on the device
             {
+                selectedValue="00:23:FE:00:0B:23";
                 Intent intent = new Intent();
                 intent.putExtra(SELECT_DEVICE_ADDRESS, selectedValue);
 
@@ -46,52 +49,17 @@ public class SearchDeviceActivity extends Activity {
                 setResult(CHANGE_MACADDRESS, intent);
                 finish();
             }
-
-        });
-
-        try
-        {
-            mainListView = (ListView) findViewById(R.id.lstDevices);
-
-            ArrayList<String> lstDevices = new ArrayList<String>();
-
-            // Create ArrayAdapter using the planet list.
-            listAdapter = new ArrayAdapter<String>(this, R.layout.simplerow, lstDevices);
-
-            mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-            if (mBluetoothAdapter != null)
-            {
-                if (mBluetoothAdapter.isEnabled())
-                {
-                    // Listing paired devices
-                    Set<BluetoothDevice> devices = mBluetoothAdapter.getBondedDevices();
-                    for (BluetoothDevice device : devices)
-                    {
-                        listAdapter.add(device.getAddress() + "   " + device.getName());
-                    }
-                }
-            }
-            mainListView.setAdapter(listAdapter);
-
-            mainListView.setOnItemClickListener(new AdapterView.OnItemClickListener()
-            {
-                @Override
-                public void onItemClick( AdapterView<?> parent, View item, int position, long id)
-                {
-                    selectedValue = (String) listAdapter.getItem(position);
-
-                    String[] aux = selectedValue.split("   ");
-                    selectedValue = aux[0];
-                }
-            });
         }
-        catch (Exception ex)
-        {
+
+
+
+
+
+
+
+
 
         }
 
     }
 
-
-
-}

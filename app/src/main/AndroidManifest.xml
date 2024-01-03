@@ -35,7 +35,7 @@
 
 
         <activity
-            android:name=".BioLibTestActivity"
+            android:name=".DeveloperActivity"
             android:exported="true"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name" >
@@ -56,7 +56,7 @@
         </activity>
 
         <activity
-            android:name=".BioLibUserActivity"
+            android:name=".BluetoothSettingsActivity"
             android:exported="true"
             android:label="@string/app_name" >
             <intent-filter>
@@ -66,6 +66,9 @@
         </activity>
 
 
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".FallHistoryActivity" />
 
         <activity android:name=".NewUserActivity" />
         <activity android:name=".RegisteredUserActivity" />
