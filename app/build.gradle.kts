@@ -33,6 +33,7 @@ android {
 dependencies {
     implementation ("com.jjoe64:graphview:4.2.2")
     implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation ("com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation(files("libs\\biolib.sdk.jar"))

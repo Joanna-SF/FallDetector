@@ -3,10 +3,8 @@ package org.falldetectives.falldetector;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.Nullable;
 import android.content.Intent;
-import android.content.Intent;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -34,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonBioLibDeveloper = findViewById(R.id.biolib_developer);
         Button buttonBioLibUser = findViewById(R.id.biolib_user);
+        Button buttonFallHistory = findViewById(R.id.fall_history);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
         //phoneNumber= personEmergencyContact.getText().toString();
@@ -62,6 +61,14 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
                 intentBioLibUser.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intentBioLibUser);
+            }
+        });
+
+        buttonFallHistory.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view)
+            {
+                Intent intentFallHistory = new Intent(MainActivity.this, DisplayHistoryActivity.class);
+                startActivity(intentFallHistory);
             }
         });
 
