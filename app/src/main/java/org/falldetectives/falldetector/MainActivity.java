@@ -52,6 +52,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button editProfileButton = findViewById(R.id.button4);
+
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create intent to start EditProfileActivity
+                Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+
+                // Pass the selected user information to EditProfileActivity
+                if (selectedUser != null) {
+                    intent.putExtra("SELECTED_USER", selectedUser);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "User null", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         buttonBluetoothSettings.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {
@@ -88,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public void sendMessage(View v) {
         startActivityForResult(CountdownActivity.newIntent(this), COUNTDOWN_REQUEST_CODE);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
