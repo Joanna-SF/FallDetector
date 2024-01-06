@@ -1,5 +1,4 @@
 package org.falldetectives.falldetector;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.Nullable;
 import android.content.Intent;
@@ -23,11 +22,9 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     TextView personEmergencyContact;
     TextView personName;
-    //public String phoneNumber;
     private static final int COUNTDOWN_REQUEST_CODE = 2;
     private static final int REQUEST_OK = 3;
     private UserModel selectedUser;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,19 +35,14 @@ public class MainActivity extends AppCompatActivity {
         Button buttonBioLibUser = findViewById(R.id.biolib_user);
 
         personEmergencyContact = findViewById(R.id.editTextPhone);
-        //phoneNumber= personEmergencyContact.getText().toString();
-
-        //button that simulates the fall
         Button buttonSendMessage = findViewById(R.id.buttonSendMessage);
         buttonSendMessage.setOnClickListener(this::sendMessage);
-        personName=findViewById(R.id.textView13);
+        personName = findViewById(R.id.textView13);
 
         buttonBioLibDeveloper.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, BioLibTestActivity.class);
-                String phoneNumber=personEmergencyContact.getText().toString();
-                //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
+                String phoneNumber = personEmergencyContact.getText().toString();
                 intent.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intent);
             }
@@ -65,25 +57,23 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
 
                 // Pass the selected user information to EditProfileActivity
-                intent.putExtra("SELECTED_USER", selectedUser);
-
-                startActivity(intent);
+                if (selectedUser != null) {
+                    intent.putExtra("SELECTED_USER", selectedUser);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(MainActivity.this, "User null", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
-
-
         buttonBioLibUser.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view)
-            {
+            public void onClick(View view) {
                 Intent intentBioLibUser = new Intent(MainActivity.this, BioLibUserActivity.class);
-                String phoneNumber=personEmergencyContact.getText().toString();
-                //Toast.makeText(getApplicationContext(), "phoneNumber" +phoneNumber, Toast.LENGTH_SHORT).show();
+                String phoneNumber = personEmergencyContact.getText().toString();
                 intentBioLibUser.putExtra("PHONE_NUMBER", phoneNumber);
                 startActivity(intentBioLibUser);
             }
         });
-
 
         // Check for SMS permission
         if (ContextCompat.checkSelfPermission(MainActivity.this, Manifest.permission.SEND_SMS)
@@ -94,21 +84,18 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("SELECTED_USER")) {
-            UserModel selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
+            selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
 
             personEmergencyContact.setText(String.valueOf(selectedUser.getEmergency_contact()));
             String welcomeMessage = "Welcome, " + selectedUser.getName() + "!";
             personName.setText(welcomeMessage);
-
-            //personName.setText(String.valueOf((selectedUser.getName())));
-
-
         }
     }
 
     public void sendMessage(View v) {
         startActivityForResult(CountdownActivity.newIntent(this), COUNTDOWN_REQUEST_CODE);
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -116,19 +103,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == COUNTDOWN_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(getApplicationContext(), "User is Ok", Toast.LENGTH_SHORT).show();
-
-            } else if (resultCode == CountdownActivity.RESULT_SEND_FALL_ALERT) {
-
-                sendFallAlert();
             } else {
-
                 sendFallAlert();
             }
-
         }
     }
-    public void sendFallAlert() {
 
+    public void sendFallAlert() {
         EditText editTextPhoneNumber = findViewById(R.id.editTextPhone);
         String phoneNumber = editTextPhoneNumber.getText().toString();
         String message = getResources().getString(R.string.fall_message);
@@ -144,11 +125,8 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         } else {
-            // Handle the case where SMS permission is not granted
             ActivityCompat.requestPermissions(MainActivity.this,
                     new String[]{Manifest.permission.SEND_SMS}, 1);
         }
     }
-
-
-};
+}
