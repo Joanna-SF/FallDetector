@@ -54,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button editProfileButton = findViewById(R.id.button4);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create intent to start EditProfileActivity
+                Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         buttonBioLibUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {

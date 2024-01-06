@@ -70,6 +70,7 @@
         <activity android:name=".NewUserActivity" />
         <activity android:name=".RegisteredUserActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".CountdownActivity"
             android:exported="true" />
 
