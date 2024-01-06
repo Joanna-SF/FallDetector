@@ -82,4 +82,23 @@ public class UserDatabase extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
+    public boolean updateUser(int userId, String updatedName, int updatedAge, String updatedBloodType, String updatedEmergencyContact) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_USER_NAME, updatedName);
+        cv.put(COLUMN_USER_AGE, updatedAge);
+        cv.put(COLUMN_USER_BLOOD_TYPE, updatedBloodType);
+        cv.put(COLUMN_USER_EMERGENCY_CONTACT, updatedEmergencyContact);
+
+        int update = db.update(USER_TABLE, cv, COLUMN_ID + " = ?", new String[]{String.valueOf(userId)});
+        db.close();
+
+        return update != 0;
+    }
+    public void deleteUser(UserModel user) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(USER_TABLE, COLUMN_ID + " = ?", new String[]{String.valueOf(user.getID())});
+        db.close();
+    }
+
 }
