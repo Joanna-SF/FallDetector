@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_OK = 3;
     private UserModel selectedUser;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
