@@ -36,7 +36,6 @@ public class NewUserActivity extends AppCompatActivity {
 
                 UserDatabase userdataBase = new UserDatabase(NewUserActivity.this);
                 boolean success = userdataBase.addOne(userModel);
-
                 Toast.makeText(NewUserActivity.this, "Success ="+success, Toast.LENGTH_SHORT).show();
 
             }

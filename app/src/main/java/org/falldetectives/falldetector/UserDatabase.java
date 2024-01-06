@@ -1,14 +1,14 @@
 package org.falldetectives.falldetector;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+        import android.content.ContentValues;
+        import android.content.Context;
+        import android.database.Cursor;
+        import android.database.sqlite.SQLiteDatabase;
+        import android.database.sqlite.SQLiteOpenHelper;
 
-import androidx.annotation.Nullable;
+        import androidx.annotation.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
 public class UserDatabase extends SQLiteOpenHelper {
 
@@ -18,7 +18,9 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String COLUMN_USER_BLOOD_TYPE = "USER_BLOOD_TYPE";
     public static final String COLUMN_USER_EMERGENCY_CONTACT = "USER_EMERGENCY_CONTACT";
     public static final String COLUMN_ID = "ID";
-
+    public static final String FALL_HISTORY_TABLE = "Fall_History_Table";
+    public static final String COLUMN_FALL_TIMESTAMP = "FALL_TIMESTAMP";
+    public static final String COLUMN_FALL_IS_FALSE_ALARM = "IS_FALSE_ALARM";
     public UserDatabase(@Nullable Context context) {
         super(context, "user.db", null, 1);
     }
@@ -32,6 +34,12 @@ public class UserDatabase extends SQLiteOpenHelper {
                 COLUMN_USER_BLOOD_TYPE + " TEXT, " +
                 COLUMN_USER_EMERGENCY_CONTACT + " TEXT)";
         db.execSQL(createTableStatement);
+
+        String createFallHistoryTableStatement = "CREATE TABLE " + FALL_HISTORY_TABLE + " (" +
+                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                COLUMN_FALL_TIMESTAMP + " INTEGER, " +
+                COLUMN_FALL_IS_FALSE_ALARM + " INTEGER)";
+        db.execSQL(createFallHistoryTableStatement);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -81,5 +89,32 @@ public class UserDatabase extends SQLiteOpenHelper {
         cursor.close();
         db.close();
         return returnList;
+    }
+    public boolean addFallEvent(FallData fallData) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_FALL_TIMESTAMP, fallData.getTimestamp());
+        cv.put(COLUMN_FALL_IS_FALSE_ALARM, fallData.isFalseAlarm() ? 1 : 0);
+        long insert = db.insert(FALL_HISTORY_TABLE, null, cv);
+        db.close();
+        return insert != -1;
+    }
+
+    public List<FallData> getFallHistory(int userId) {
+        List<FallData> fallHistory = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE;
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
+            do {
+                long timestamp = cursor.getLong(cursor.getColumnIndex(COLUMN_FALL_TIMESTAMP));
+                boolean isFalseAlarm = cursor.getInt(cursor.getColumnIndex(COLUMN_FALL_IS_FALSE_ALARM)) == 1;
+                FallData fallData = new FallData(timestamp, isFalseAlarm);
+                fallHistory.add(fallData);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return fallHistory;
     }
 }
