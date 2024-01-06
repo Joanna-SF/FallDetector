@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
     //public String phoneNumber;
     private static final int COUNTDOWN_REQUEST_CODE = 2;
     private static final int REQUEST_OK = 3;
+    private UserModel selectedUser;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +57,22 @@ public class MainActivity extends AppCompatActivity {
         });
 
         Button editProfileButton = findViewById(R.id.button4);
+
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Create intent to start EditProfileActivity
                 Intent intent = new Intent(MainActivity.this, EditProfileActivity.class);
+
+                // Pass the selected user information to EditProfileActivity
+                intent.putExtra("SELECTED_USER", selectedUser);
+
                 startActivity(intent);
             }
         });
+
+
+
         buttonBioLibUser.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view)
             {

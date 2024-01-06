@@ -3,6 +3,7 @@
     <string name="emergency_contact">Emergency contact</string>
     <string name="phone_hint">+351 111111111</string>
     <string name="button_text">Manual Fall Alert</string>
+    <string name="button_edit">Edit Profile</string>
     <string name="fall_message">Fall Alert! Your loved one may need your help.</string>
 
     <string name="discover">Get Paired Devices</string>
