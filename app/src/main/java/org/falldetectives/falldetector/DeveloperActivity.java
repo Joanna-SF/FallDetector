@@ -22,7 +22,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.helper.StaticLabelsFormatter;
@@ -31,7 +30,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 
 
-public class BioLibTestActivity extends Activity {
+public class DeveloperActivity extends Activity {
     // creating a variable
     // for our graph view.
     GraphView graphView;
@@ -673,7 +672,7 @@ public class BioLibTestActivity extends Activity {
                             textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                             Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                            Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                            Intent intent = new Intent(DeveloperActivity.this, CountdownActivity.class);
                             startActivity(intent);
                             // Additional actions can be taken here (e.g., alerting emergency services)
                         }
@@ -683,7 +682,7 @@ public class BioLibTestActivity extends Activity {
                         textACCFall.setText("ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter);
                         Toast.makeText(getApplicationContext(), "ACC:  Fall was detected! Magnitude: " + accelerationMagnitude + " FallCounter: " + fallCounter, Toast.LENGTH_SHORT).show();
 
-                        Intent intent = new Intent(BioLibTestActivity.this, CountdownActivity.class);
+                        Intent intent = new Intent(DeveloperActivity.this, CountdownActivity.class);
                         startActivity(intent);
                     }
 

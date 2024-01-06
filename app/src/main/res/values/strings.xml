@@ -22,8 +22,8 @@
     <string name="biolib_user">Bluetooth Settings</string>
 
     <string name="title_activity_detect_fall">DetectFallActivity </string>
+    <string name="btSettings">User Settings</string>
     <string name="biolib_developer">Developer</string>
-
     <string name="welcome_message">Welcome, %1$s!</string>
 
 
