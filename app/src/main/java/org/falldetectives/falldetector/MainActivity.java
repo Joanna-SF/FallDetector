@@ -1,4 +1,5 @@
 package org.falldetectives.falldetector;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.Nullable;
 import android.content.Intent;
