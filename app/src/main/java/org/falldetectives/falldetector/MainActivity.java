@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     //public String phoneNumber;
     private static final int COUNTDOWN_REQUEST_CODE = 2;
     private static final int REQUEST_OK = 3;
+    private UserModel selectedUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("SELECTED_USER")) {
-            UserModel selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
+            selectedUser = (UserModel) intent.getSerializableExtra("SELECTED_USER");
 
             personEmergencyContact.setText(String.valueOf(selectedUser.getEmergency_contact()));
             String welcomeMessage = "Welcome, " + selectedUser.getName() + "!";
