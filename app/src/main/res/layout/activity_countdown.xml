@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3498db"
+    android:background="@color/primary"
     android:orientation="vertical"
     android:gravity="center">
 
@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Fall Alert!"
-        android:textColor="#800080"
+        android:fontFamily="@font/rocknrolloneregular"
+        android:textColor="#FFFFFF"
         android:textSize="36sp" />
 
     <ImageView
@@ -20,7 +21,7 @@
         android:layout_width="149dp"
         android:layout_height="149dp"
         android:layout_marginTop="5dp"
-        app:srcCompat="@drawable/img" />
+        app:srcCompat="@drawable/fall_icon" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,16 +29,20 @@
         android:orientation="horizontal"
         android:gravity="center">
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonImOk"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/rocknrolloneregular"
+            android:background="@drawable/round_back_secondary_100"
             android:layout_margin="20dp"
             android:text="I'm Ok" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/buttonSendFallAlert"
             android:layout_width="150dp"
+            android:fontFamily="@font/rocknrolloneregular"
+            android:background="@drawable/round_back_secondary_100"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:text="Send Fall Alert" />
@@ -50,7 +55,8 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="Automatic Notification in"
-        android:textColor="#000000"
+        android:fontFamily="@font/rocknrolloneregular"
+        android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:textStyle="bold"
         android:layout_marginTop="10dp"/>
@@ -59,7 +65,9 @@
         android:id="@+id/textCountdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/rocknrolloneregular"
         android:text="30"
+        android:textColor="#FFFFFF"
         android:textSize="50sp" />
 
 </LinearLayout>
