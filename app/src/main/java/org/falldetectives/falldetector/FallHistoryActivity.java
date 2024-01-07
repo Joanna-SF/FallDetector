@@ -31,19 +31,19 @@ public class FallHistoryActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
 
         userDatabase = new UserDatabase(this);
-        int userId = getCurrentUserId();
-        List<FallData> userFallHistory = userDatabase.getFallHistory(userId);
+        String userName = getCurrentUserName(); // Fetch the current user's name
+        List<FallData> userFallHistory = userDatabase.getFallHistory(userName);
 
         adapter = new FallDataAdapter(userFallHistory);
         recyclerView.setAdapter(adapter);
     }
 
-    private int getCurrentUserId() {
+    private String getCurrentUserName() {
         SharedPreferences sharedPreferences = getSharedPreferences("USER_NAME", MODE_PRIVATE);
-        // Assuming "UserID" is the key used to store the user's ID upon login
-        return sharedPreferences.getInt("ID", -1); // Returns -1 if no ID is found
+        return sharedPreferences.getString("UserName", null); // Returns null if no name is found
     }
 }
+
 
 
 

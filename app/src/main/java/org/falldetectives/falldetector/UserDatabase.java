@@ -21,6 +21,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String FALL_HISTORY_TABLE = "Fall_History_Table";
     public static final String COLUMN_FALL_TIMESTAMP = "FALL_TIMESTAMP";
     public static final String COLUMN_FALL_IS_FALSE_ALARM = "IS_FALSE_ALARM";
+    public static final String COLUMN_FALL_USER_NAME = "USER_NAME";
     public UserDatabase(@Nullable Context context) {
         super(context, "user.db", null, 1);
     }
@@ -38,7 +39,8 @@ public class UserDatabase extends SQLiteOpenHelper {
         String createFallHistoryTableStatement = "CREATE TABLE " + FALL_HISTORY_TABLE + " (" +
                 COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 COLUMN_FALL_TIMESTAMP + " INTEGER, " +
-                COLUMN_FALL_IS_FALSE_ALARM + " INTEGER)";
+                COLUMN_FALL_IS_FALSE_ALARM + " INTEGER, " +
+                COLUMN_FALL_USER_NAME + " TEXT)";
         db.execSQL(createFallHistoryTableStatement);
     }
     @Override
@@ -90,21 +92,22 @@ public class UserDatabase extends SQLiteOpenHelper {
         db.close();
         return returnList;
     }
-    public boolean addFallEvent(FallData fallData) {
+    public boolean addFallEvent(FallData fallData, String userName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COLUMN_FALL_TIMESTAMP, fallData.getTimestamp());
         cv.put(COLUMN_FALL_IS_FALSE_ALARM, fallData.isFalseAlarm() ? 1 : 0);
+        cv.put(COLUMN_FALL_USER_NAME, userName);
         long insert = db.insert(FALL_HISTORY_TABLE, null, cv);
         db.close();
         return insert != -1;
     }
 
-    public List<FallData> getFallHistory(int userId) {
+    public List<FallData> getFallHistory(String userName) {
         List<FallData> fallHistory = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE;
-        Cursor cursor = db.rawQuery(queryString, null);
+        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE + " WHERE " + COLUMN_FALL_USER_NAME + " = ?";
+        Cursor cursor = db.rawQuery(queryString, new String[]{userName});
         if (cursor.moveToFirst()) {
             do {
                 long timestamp = cursor.getLong(cursor.getColumnIndex(COLUMN_FALL_TIMESTAMP));

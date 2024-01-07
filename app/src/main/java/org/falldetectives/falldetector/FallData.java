@@ -7,10 +7,12 @@ import java.util.Locale;
 public class FallData {
     private long timestamp;
     private boolean isFalseAlarm;
+    private String userName;
 
     public FallData(long timestamp, boolean isFalseAlarm) {
         this.timestamp = timestamp;
         this.isFalseAlarm = isFalseAlarm;
+        this.userName = userName;
     }
 
     public long getTimestamp() {
@@ -21,6 +23,9 @@ public class FallData {
         return isFalseAlarm;
     }
 
+    public String getUserName() {
+        return userName;
+    }
     public String getFormattedTimestamp() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date(timestamp);

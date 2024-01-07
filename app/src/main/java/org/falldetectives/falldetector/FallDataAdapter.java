@@ -16,7 +16,7 @@ public class FallDataAdapter extends RecyclerView.Adapter<FallDataAdapter.ViewHo
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup     parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fall_history_item, parent, false);
         return new ViewHolder(view);
     }
@@ -26,19 +26,21 @@ public class FallDataAdapter extends RecyclerView.Adapter<FallDataAdapter.ViewHo
         FallData fallData = fallDataList.get(position);
         holder.textViewTimestamp.setText(fallData.getFormattedTimestamp());
         holder.textViewStatus.setText(fallData.getFalseAlarmStatus());
+        holder.textViewUserName.setText(fallData.getUserName());
     }
-
     @Override
     public int getItemCount() {
         return fallDataList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView textViewUserName;
         public TextView textViewTimestamp;
         public TextView textViewStatus;
 
         public ViewHolder(View view) {
             super(view);
+            textViewUserName = view.findViewById(R.id.textViewUserName); // Make sure this ID matches your layout
             textViewTimestamp = view.findViewById(R.id.textViewTimestamp);
             textViewStatus = view.findViewById(R.id.textViewStatus);
         }
