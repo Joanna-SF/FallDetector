@@ -9,7 +9,7 @@ public class FallData {
     private boolean isFalseAlarm;
     private String userName;
 
-    public FallData(long timestamp, boolean isFalseAlarm) {
+    public FallData(long timestamp, boolean isFalseAlarm, String userName) {
         this.timestamp = timestamp;
         this.isFalseAlarm = isFalseAlarm;
         this.userName = userName;
