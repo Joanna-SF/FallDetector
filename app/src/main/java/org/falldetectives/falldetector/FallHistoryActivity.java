@@ -2,19 +2,16 @@ package org.falldetectives.falldetector;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.Toast;
+import android.util.Log;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
 public class FallHistoryActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private FallDataAdapter adapter;
+    private LinearLayout linearLayoutFallHistory;
     private UserDatabase userDatabase;
 
     @Override
@@ -22,28 +19,30 @@ public class FallHistoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fall_history);
 
-        ImageView returnArrow = findViewById(R.id.iconRightArrow_settings);
-        Toast.makeText(getApplicationContext(), "Profile Page", Toast.LENGTH_SHORT).show();
-        returnArrow.setOnClickListener(view -> finish());
-
-        recyclerView = findViewById(R.id.fallHistoryRecyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-
+        linearLayoutFallHistory = findViewById(R.id.linear_layout_fall_history);
         userDatabase = new UserDatabase(this);
-        String userName = getCurrentUserName(); // Fetch the current user's name
-        List<FallData> userFallHistory = userDatabase.getFallHistory(userName);
 
-        adapter = new FallDataAdapter(userFallHistory);
-        recyclerView.setAdapter(adapter);
+        String currentUserName = getCurrentUserName();
+        displayFallHistory(currentUserName);
+    }
+
+    private void displayFallHistory(String userName) {
+        List<FallData> fallHistory = userDatabase.getFallHistory(userName);
+        if (fallHistory.isEmpty()) {
+            // Handle empty fall history
+            Log.d("FallHistoryActivity", "No fall history for user: " + userName);
+            return;
+        }
+
+        for (FallData fallData : fallHistory) {
+            TextView textView = new TextView(this);
+            // ... [Set text and other properties]
+            linearLayoutFallHistory.addView(textView);
+        }
     }
 
     private String getCurrentUserName() {
-        SharedPreferences sharedPreferences = getSharedPreferences("USER_NAME", MODE_PRIVATE);
-        return sharedPreferences.getString("UserName", null); // Returns null if no name is found
+        SharedPreferences sharedPreferences = getSharedPreferences("USER_PREFS", MODE_PRIVATE);
+        return sharedPreferences.getString("UserName", "Unknown User");
     }
 }
-
-
-
-

@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.ArrayList;
 import java.util.List;
-import android.widget.TextView;
 
 public class CountdownActivity extends AppCompatActivity {
 
@@ -75,9 +77,15 @@ public class CountdownActivity extends AppCompatActivity {
 
     private void addFallData(boolean isFalseAlarm) {
         long timestamp = System.currentTimeMillis();
-        FallData fallData = new FallData(timestamp, isFalseAlarm);
-        fallDataList.add(fallData);
-        saveFallDataToDatabase(isFalseAlarm);
+        // Retrieve the current user's name. Adjust this according to your app's user management system.
+        String userName = getCurrentUserName();
+        FallData fallData = new FallData(timestamp, isFalseAlarm, userName);
+        saveFallDataToDatabase(fallData); // Adjusted to pass FallData object
+    }
+
+    private String getCurrentUserName() {
+        // Placeholder for user name retrieval logic
+        return "User_Name"; // Replace this with actual logic to retrieve the current user's name
     }
 
     private void loadFallDataFromDatabase() {
@@ -90,17 +98,19 @@ public class CountdownActivity extends AppCompatActivity {
             if (timestampIndex != -1 && isFalseAlarmIndex != -1) {
                 long timestamp = cursor.getLong(timestampIndex);
                 boolean isFalseAlarm = cursor.getInt(isFalseAlarmIndex) == 1;
-                fallDataList.add(new FallData(timestamp, isFalseAlarm));
+                // Assuming the user name is also retrieved from the cursor if available
+                fallDataList.add(new FallData(timestamp, isFalseAlarm, "User_Name"));
             }
         }
 
         cursor.close();
     }
 
-    private void saveFallDataToDatabase(boolean isFalseAlarm) {
+    private void saveFallDataToDatabase(FallData fallData) {
         ContentValues values = new ContentValues();
-        values.put(DatabaseHelper.COLUMN_TIMESTAMP, System.currentTimeMillis());
-        values.put(DatabaseHelper.COLUMN_IS_FALSE_ALARM, isFalseAlarm ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_TIMESTAMP, fallData.getTimestamp());
+        values.put(DatabaseHelper.COLUMN_IS_FALSE_ALARM, fallData.isFalseAlarm() ? 1 : 0);
+        values.put(DatabaseHelper.COLUMN_USER_NAME, fallData.getUserName()); // Assuming this column is present in the database
 
         database.insert(DatabaseHelper.TABLE_FALL_DATA, null, values);
     }

@@ -40,15 +40,16 @@ public class DisplayHistoryActivity extends AppCompatActivity {
 
         int timestampIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_TIMESTAMP);
         int isFalseAlarmIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_IS_FALSE_ALARM);
+        int userNameIndex = cursor.getColumnIndex(DatabaseHelper.COLUMN_USER_NAME); // Add this line
 
         while (cursor.moveToNext()) {
-            if (timestampIndex != -1 && isFalseAlarmIndex != -1) {
+            if (timestampIndex != -1 && isFalseAlarmIndex != -1 && userNameIndex != -1) {
                 long timestamp = cursor.getLong(timestampIndex);
                 boolean isFalseAlarm = cursor.getInt(isFalseAlarmIndex) == 1;
-                fallDataList.add(new FallData(timestamp, isFalseAlarm));
+                String userName = cursor.getString(userNameIndex); // Retrieve the user's name
+                fallDataList.add(new FallData(timestamp, isFalseAlarm, userName));
             }
         }
-
         cursor.close();
     }
 

@@ -106,14 +106,12 @@ public class UserDatabase extends SQLiteOpenHelper {
     public List<FallData> getFallHistory(String userName) {
         List<FallData> fallHistory = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE + " WHERE " + COLUMN_FALL_USER_NAME + " = ?";
+
+        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE + " WHERE " + COLUMN_USER_NAME + " = ?";
         Cursor cursor = db.rawQuery(queryString, new String[]{userName});
+
         if (cursor.moveToFirst()) {
             do {
-                long timestamp = cursor.getLong(cursor.getColumnIndex(COLUMN_FALL_TIMESTAMP));
-                boolean isFalseAlarm = cursor.getInt(cursor.getColumnIndex(COLUMN_FALL_IS_FALSE_ALARM)) == 1;
-                FallData fallData = new FallData(timestamp, isFalseAlarm);
-                fallHistory.add(fallData);
             } while (cursor.moveToNext());
         }
         cursor.close();
