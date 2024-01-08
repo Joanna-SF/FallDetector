@@ -22,6 +22,7 @@ public class UserDatabase extends SQLiteOpenHelper {
     public static final String COLUMN_FALL_TIMESTAMP = "FALL_TIMESTAMP";
     public static final String COLUMN_FALL_IS_FALSE_ALARM = "IS_FALSE_ALARM";
     public static final String COLUMN_FALL_USER_NAME = "USER_NAME";
+
     public UserDatabase(@Nullable Context context) {
         super(context, "user.db", null, 1);
     }
@@ -43,6 +44,7 @@ public class UserDatabase extends SQLiteOpenHelper {
                 COLUMN_FALL_USER_NAME + " TEXT)";
         db.execSQL(createFallHistoryTableStatement);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
@@ -64,34 +66,35 @@ public class UserDatabase extends SQLiteOpenHelper {
         }
 
     }
-    public List<UserModel> getEveryone(){
+
+    public List<UserModel> getEveryone() {
         List<UserModel> returnList = new ArrayList<>();
 
         //get data from database
-        String queryString= "SELECT * FROM " + USER_TABLE;
+        String queryString = "SELECT * FROM " + USER_TABLE;
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(queryString,null);
-        if (cursor.moveToFirst()){
+        Cursor cursor = db.rawQuery(queryString, null);
+        if (cursor.moveToFirst()) {
             // loop through the results and create new user objects
-            do{
-                int userID=cursor.getInt(0);
-                String userName=cursor.getString(1);
-                String userAge=cursor.getString(2);
-                String userBloodType=cursor.getString(3);
-                int userEmergencyContact=cursor.getInt(4);
+            do {
+                int userID = cursor.getInt(0);
+                String userName = cursor.getString(1);
+                String userAge = cursor.getString(2);
+                String userBloodType = cursor.getString(3);
+                int userEmergencyContact = cursor.getInt(4);
 
 
-                UserModel newUser=new UserModel(userID, userName,userAge,userBloodType,userEmergencyContact);
+                UserModel newUser = new UserModel(userID, userName, userAge, userBloodType, userEmergencyContact);
                 returnList.add(newUser);
-            }while(cursor.moveToNext());
-        }
-        else{
+            } while (cursor.moveToNext());
+        } else {
             // do not add anything to the list
         }
         cursor.close();
         db.close();
         return returnList;
     }
+
     public boolean addFallEvent(FallData fallData, String userName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
@@ -107,14 +110,21 @@ public class UserDatabase extends SQLiteOpenHelper {
         List<FallData> fallHistory = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE + " WHERE " + COLUMN_USER_NAME + " = ?";
+        String queryString = "SELECT * FROM " + FALL_HISTORY_TABLE + " WHERE " + COLUMN_FALL_USER_NAME + " = ?";
         Cursor cursor = db.rawQuery(queryString, new String[]{userName});
 
-        if (cursor.moveToFirst()) {
-            do {
-            } while (cursor.moveToNext());
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                do {
+                    long timestamp = cursor.getLong(cursor.getColumnIndex(COLUMN_FALL_TIMESTAMP));
+                    boolean isFalseAlarm = cursor.getInt(cursor.getColumnIndex(COLUMN_FALL_IS_FALSE_ALARM)) == 1;
+                    String user = cursor.getString(cursor.getColumnIndex(COLUMN_FALL_USER_NAME));
+                    FallData fallData = new FallData(timestamp, isFalseAlarm, user);
+                    fallHistory.add(fallData);
+                } while (cursor.moveToNext());
+            }
+            cursor.close();
         }
-        cursor.close();
         db.close();
         return fallHistory;
     }
